@@ -38,7 +38,6 @@ Clock::Clock(DockPanel* parent, MultiDockModel* model,
              Qt::Orientation orientation, int minSize, int maxSize)
     : IconlessDockItem(parent, model, "" /* label */, orientation, minSize, maxSize,
                        kWhRatio),
-      calendar_(parent),
       fontFamilyGroup_(this) {
   createMenu();
   loadConfig();
@@ -79,9 +78,7 @@ void Clock::draw(QPainter *painter) const {
 }
 
 void Clock::mousePressEvent(QMouseEvent *e) {
-  if (e->button() == Qt::LeftButton) {
-    calendar_.showCalendar();
-  } else if (e->button() == Qt::RightButton) {
+  if (e->button() == Qt::RightButton) {
     // In case other docks have changed the config.
     loadConfig();
     showPopupMenu(&menu_);

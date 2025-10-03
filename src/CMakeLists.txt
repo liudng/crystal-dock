@@ -33,7 +33,6 @@ set(SRCS
     view/appearance_settings_dialog.cc
     view/application_menu_settings_dialog.cc
     view/application_menu.cc
-    view/calendar.cc
     view/clock.cc
     view/color_button.cc
     view/desktop_selector.cc
@@ -67,7 +66,6 @@ set(SRCS
     view/appearance_settings_dialog.h
     view/application_menu_settings_dialog.h
     view/application_menu.h
-    view/calendar.h
     view/clock.h
     view/color_button.h
     view/desktop_selector.h

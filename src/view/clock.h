@@ -27,8 +27,6 @@
 #include <QObject>
 #include <QString>
 
-#include "calendar.h"
-
 namespace crystaldock {
 
 // A digital clock.
@@ -69,8 +67,6 @@ class Clock : public QObject, public IconlessDockItem {
   void createMenu();
 
   void saveConfig();
-
-  Calendar calendar_;
 
   // Context menu.
   QMenu menu_;
