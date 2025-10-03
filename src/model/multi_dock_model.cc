@@ -62,7 +62,6 @@ constexpr char MultiDockModel::kLabel[];
 constexpr char MultiDockModel::kFontSize[];
 constexpr char MultiDockModel::kBackgroundAlpha[];
 constexpr char MultiDockModel::kPagerCategory[];
-constexpr char MultiDockModel::kWallpaper[];
 constexpr char MultiDockModel::kShowDesktopNumber[];
 constexpr char MultiDockModel::kTaskManagerCategory[];
 constexpr char MultiDockModel::kCurrentDesktopTasksOnly[];

@@ -42,12 +42,6 @@ class ConfigHelper  {
     return configDir_.filePath(kAppearanceConfig);
   }
 
-  static QString wallpaperConfigKey(std::string_view desktopId, int screen) {
-    // Screen is 0-based.
-    return QString("wallpaper") + QString::fromStdString(std::string(desktopId)) +
-        ((screen == 0) ? "" : (QString("_") + QString::number(screen + 1)));
-  }
-
   // Finds the configs of all existing docks.
   // Returns a list of dock config paths.
   std::vector<QString> findAllDockConfigs() const;

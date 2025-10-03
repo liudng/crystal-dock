@@ -32,10 +32,6 @@ MultiDockView::MultiDockView(MultiDockModel* model)
     : model_(model),
       desktopEnv_(DesktopEnv::getDesktopEnv()) {
   connect(model_, SIGNAL(dockAdded(int)), this, SLOT(onDockAdded(int)));
-  connect(model_, SIGNAL(wallpaperChanged(int)), this,
-          SLOT(setWallpaper(int)));
-  connect(WindowSystem::self(), SIGNAL(currentDesktopChanged(std::string_view)),
-          this, SLOT(setWallpaper()));
   loadData();
 }
 
@@ -60,7 +56,6 @@ void MultiDockView::show() {
   for (const auto& dock : docks_) {
     dock.second->show();
   }
-  setWallpaper();
 }
 
 void MultiDockView::exit() {
@@ -72,41 +67,6 @@ void MultiDockView::exit() {
 void MultiDockView::onDockAdded(int dockId) {
   docks_[dockId] = std::make_unique<DockPanel>(this, model_, dockId);
   docks_[dockId]->show();
-}
-
-bool MultiDockView::setWallpaper() {
-  if (!model_->hasPager()) {
-    return false;
-  }
-
-  for (unsigned int screen = 0; screen < WindowSystem::screens().size(); ++screen) {
-    if (!setWallpaper(screen)) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-bool MultiDockView::setWallpaper(int screen) {
-  if (!model_->hasPager()) {
-    return false;
-  }
-
-  QString wallpaper = model_->wallpaper(WindowSystem::currentDesktop(), screen);
-  if (wallpaper.isEmpty()) {
-    return false;  // nothing to do here.
-  }
-
-  if (!QFile::exists(wallpaper)) {
-    QMessageBox warning(QMessageBox::Warning, "Error",
-                        QString("Failed to load wallpaper from: ") + wallpaper,
-                        QMessageBox::Ok, nullptr, Qt::Tool);
-    warning.exec();
-    return false;
-  }
-
-  return desktopEnv_->setWallpaper(screen, wallpaper);
 }
 
 void MultiDockView::loadData() {

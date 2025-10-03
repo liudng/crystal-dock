@@ -45,8 +45,7 @@ DesktopSelector::DesktopSelector(DockPanel* parent, MultiDockModel* model,
       desktop_(desktop),
       screen_(screen),
       desktopWidth_(parent->screenGeometry().width()),
-      desktopHeight_(parent->screenGeometry().height()),
-      hasCustomWallpaper_(false) {
+      desktopHeight_(parent->screenGeometry().height()) {
   createMenu();
   loadConfig();
   connect(WindowSystem::self(), SIGNAL(desktopNameChanged(std::string_view, std::string_view)),
@@ -58,14 +57,10 @@ DesktopSelector::DesktopSelector(DockPanel* parent, MultiDockModel* model,
 }
 
 void DesktopSelector::draw(QPainter* painter) const {
-  if (hasCustomWallpaper_) {
-    IconBasedDockItem::draw(painter);
-  } else {
-    // Draw rectangles with desktop numbers if no custom wallpapers set.
-    QColor fillColor = model_->backgroundColor().lighter();
-    fillColor.setAlphaF(0.42);
-    painter->fillRect(left_, top_, getWidth(), getHeight(), QBrush(fillColor));
-  }
+  // Draw rectangles with desktop numbers.
+  QColor fillColor = model_->backgroundColor().lighter();
+  fillColor.setAlphaF(0.42);
+  painter->fillRect(left_, top_, getWidth(), getHeight(), QBrush(fillColor));
 
   if (model_->showDesktopNumber()) {
     painter->setFont(adjustFontSize(getWidth(), getHeight(),
@@ -99,12 +94,6 @@ void DesktopSelector::mousePressEvent(QMouseEvent* e) {
 }
 
 void DesktopSelector::loadConfig() {
-  const auto& wallpaper = model_->wallpaper(desktop_.id, screen_);
-  if (!wallpaper.isEmpty() && QFile::exists(wallpaper)) {
-    setIconScaled(QPixmap(wallpaper));
-    hasCustomWallpaper_ = true;
-  }
-
   showDesktopNumberAction_->setChecked(model_->showDesktopNumber());
 }
 
@@ -132,15 +121,6 @@ void DesktopSelector::onDesktopNameChanged(
 
 void DesktopSelector::createMenu() {
   titleAction_ = menu_.addSection(label_);
-  if (desktopEnv_->canSetWallpaper()) {
-    menu_.addAction(
-        QIcon::fromTheme("preferences-desktop-wallpaper"),
-        QString("Set Wallpaper for Desktop ") + QString::number(desktop_.number),
-        parent_,
-        [this] {
-          parent_->showWallpaperSettingsDialog(desktop_.number);
-        });
-  }
   showDesktopNumberAction_ = menu_.addAction(
       QString("Show Desktop Number"), this,
       [this] {

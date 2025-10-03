@@ -49,9 +49,6 @@ class MultiDockView : public QObject {
 
   void onDockAdded(int dockId);
 
-  bool setWallpaper();
-  bool setWallpaper(int screen);
-
  private:
   void loadData();
 

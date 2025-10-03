@@ -47,7 +47,6 @@
 #include "dock_item.h"
 #include "edit_launchers_dialog.h"
 #include "task_manager_settings_dialog.h"
-#include "wallpaper_settings_dialog.h"
 
 namespace crystaldock {
 
@@ -205,7 +204,6 @@ class DockPanel : public QWidget {
   void showAppearanceSettingsDialog();
   void showEditLaunchersDialog();
   void showApplicationMenuSettingsDialog();
-  void showWallpaperSettingsDialog(int desktop);
   void showTaskManagerSettingsDialog();
 
   void addDock();
@@ -419,7 +417,6 @@ class DockPanel : public QWidget {
   AppearanceSettingsDialog appearanceSettingsDialog_;
   EditLaunchersDialog editLaunchersDialog_;
   ApplicationMenuSettingsDialog applicationMenuSettingsDialog_;
-  WallpaperSettingsDialog wallpaperSettingsDialog_;
   TaskManagerSettingsDialog taskManagerSettingsDialog_;
 
   bool isMinimized_;

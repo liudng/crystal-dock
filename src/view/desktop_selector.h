@@ -87,8 +87,6 @@ class DesktopSelector : public QObject, public IconBasedDockItem {
 
   int desktopWidth_;
   int desktopHeight_;
-
-  bool hasCustomWallpaper_;
 };
 
 }  // namespace crystaldock

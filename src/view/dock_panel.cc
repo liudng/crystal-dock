@@ -81,7 +81,6 @@ DockPanel::DockPanel(MultiDockView* parent, MultiDockModel* model, int dockId)
       appearanceSettingsDialog_(this, model),
       editLaunchersDialog_(this, model, dockId),
       applicationMenuSettingsDialog_(this, model),
-      wallpaperSettingsDialog_(this, model),
       taskManagerSettingsDialog_(this, model),
       isMinimized_(true),
       isHidden_(false),
@@ -253,13 +252,6 @@ void DockPanel::showApplicationMenuSettingsDialog() {
   applicationMenuSettingsDialog_.show();
   applicationMenuSettingsDialog_.raise();
   applicationMenuSettingsDialog_.activateWindow();
-}
-
-void DockPanel::showWallpaperSettingsDialog(int desktop) {
-  wallpaperSettingsDialog_.setFor(desktop, screen_);
-  wallpaperSettingsDialog_.show();
-  wallpaperSettingsDialog_.raise();
-  wallpaperSettingsDialog_.activateWindow();
 }
 
 void DockPanel::showTaskManagerSettingsDialog() {

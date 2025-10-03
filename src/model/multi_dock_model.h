@@ -411,24 +411,6 @@ class MultiDockModel : public QObject {
     setAppearanceProperty(kApplicationMenuCategory, kBackgroundAlpha, QString::number(value));
   }
 
-  QString wallpaper(std::string_view desktopId, int screen) const {
-    return appearanceProperty(kPagerCategory,
-                              ConfigHelper::wallpaperConfigKey(desktopId, screen),
-                              QString());
-  }
-
-  void setWallpaper(std::string_view desktopId, int screen, const QString& value) {
-    setAppearanceProperty(kPagerCategory,
-                          ConfigHelper::wallpaperConfigKey(desktopId, screen),
-                          value);
-  }
-
-  // Notifies that the wallpaper for the current desktop for the specified
-  // screen has been changed.
-  void notifyWallpaperChanged(int screen) {
-    emit wallpaperChanged(screen);
-  }
-
   bool showDesktopNumber() const {
     return appearanceProperty(kPagerCategory, kShowDesktopNumber,
                               kDefaultShowDesktopNumber);
@@ -647,9 +629,6 @@ class MultiDockModel : public QObject {
   void appearanceChanged();
   void dockAdded(int dockId);
   void dockLaunchersChanged(int dockId);
-  // Wallpaper for the current desktop for screen <screen> has been changed.
-  // Will require calling Plasma D-Bus to update the wallpaper.
-  void wallpaperChanged(int screen);
   void applicationMenuConfigChanged();
 
  private:
@@ -699,7 +678,6 @@ class MultiDockModel : public QObject {
   static constexpr char kBackgroundAlpha[] = "backgroundAlpha";
 
   static constexpr char kPagerCategory[] = "Pager";
-  static constexpr char kWallpaper[] = "wallpaper";
   static constexpr char kShowDesktopNumber[] = "showDesktopNumber";  
 
   static constexpr char kTaskManagerCategory[] = "TaskManager";

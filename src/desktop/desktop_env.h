@@ -49,21 +49,6 @@ class DesktopEnv {
   // Returns a list of app IDs.
   virtual std::vector<QString> getDefaultLaunchers() const;
 
-  // Does the DE support setting wallpaper programmatically?
-  virtual bool canSetWallpaper() const { return false; }
-
-  // Supports separate wallpapers for separate screens.
-  virtual bool supportSeparateSreenWallpapers() const { return false; }
-
-  // Sets the wallpaper for the current desktop for the specified screen.
-  // If the desktop environment does not support separate wallpapers for
-  // separate screens, this simply sets the wallpaper for the current desktop
-  // for all screens.
-  // Args:
-  //   screen: screen to set wallpaper for.
-  //   wallpaper: path to the wallpaper file.
-  virtual bool setWallpaper(int screen, const QString& wallpaper) { return false; }
-
   // Returns the app ID of the default web browser.
   // Uses Firefox as fallback if default web browser not set.
   QString defaultWebBrowser() const;
