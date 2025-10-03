@@ -47,7 +47,6 @@
 #include "dock_item.h"
 #include "edit_launchers_dialog.h"
 #include "task_manager_settings_dialog.h"
-#include "trash.h"
 #include "wallpaper_settings_dialog.h"
 
 namespace crystaldock {
@@ -186,12 +185,6 @@ class DockPanel : public QWidget {
     saveDockConfig();
   }
 
-  void toggleTrash() {
-    showTrash_ = !showTrash_;
-    reload();
-    saveDockConfig();
-  }
-
   // Sets the dock on a specific screen given screen index.
   // Thus 0 is screen 1 and so on.
   // This doesn't refresh the dock.
@@ -277,10 +270,6 @@ class DockPanel : public QWidget {
     return showClock_ ? 1 : 0;
   }
 
-  int trashItemCount() const {
-    return showTrash_ ? 1 : 0;
-  }
-
   bool showTaskManager() { return model_->showTaskManager(dockId_); }
 
   void initUi();
@@ -305,8 +294,6 @@ class DockPanel : public QWidget {
   bool hasTask(void* window);
 
   void initClock();
-
-  void initTrash();
 
   void initLayoutVars();
 
@@ -367,7 +354,6 @@ class DockPanel : public QWidget {
   bool showApplicationMenu_;
   bool showPager_;
   bool showClock_;
-  bool showTrash_;
   int minSize_;
   int maxSize_;
   float spacingFactor_;  // item spacing as ratio of minSize, in (0, 1) range.
@@ -420,7 +406,6 @@ class DockPanel : public QWidget {
   QAction* pagerAction_;
   QAction* taskManagerAction_;
   QAction* clockAction_;
-  QAction* trashAction_;
   QAction* floatingStyleAction_;
   QAction* glass3DStyleAction_;
   QAction* glass2DStyleAction_;

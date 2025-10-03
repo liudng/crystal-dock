@@ -109,7 +109,7 @@ void MultiDockModel::loadDocks() {
 
 void MultiDockModel::addDock(PanelPosition position, int screen,
                              bool showApplicationMenu, bool showPager,
-                             bool showTaskManager, bool showTrash,
+                             bool showTaskManager,
                              bool showClock) {
   auto configPath = configHelper_.findNextDockConfig();
   auto dockId = addDock(configPath, position, screen);
@@ -118,7 +118,6 @@ void MultiDockModel::addDock(PanelPosition position, int screen,
   setShowApplicationMenu(dockId, showApplicationMenu);
   setShowPager(dockId, showPager);
   setShowTaskManager(dockId, showTaskManager);
-  setShowTrash(dockId, showTrash);
   setShowClock(dockId, showClock);
   emit dockAdded(dockId);
 

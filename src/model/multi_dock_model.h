@@ -81,7 +81,6 @@ constexpr bool kDefaultShowApplicationMenu = true;
 constexpr bool kDefaultShowPager = false;
 constexpr bool kDefaultShowTaskManager = true;
 constexpr bool kDefaultShowClock = true;
-constexpr bool kDefaultShowTrash = true;
 constexpr PanelStyle kDefaultPanelStyle = PanelStyle::Glass3D_Floating;
 
 constexpr char kDefaultApplicationMenuName[] = "Applications";
@@ -119,12 +118,12 @@ class MultiDockModel : public QObject {
 
   // Adds a new dock in the specified position and screen.
   void addDock(PanelPosition position, int screen, bool showApplicationMenu,
-               bool showPager, bool showTaskManager, bool showTrash,
+               bool showPager, bool showTaskManager,
                bool showClock);
 
   void addDock() {
     addDock(PanelPosition::Bottom, 0, kDefaultShowApplicationMenu,
-            kDefaultShowPager, kDefaultShowTaskManager, kDefaultShowTrash,
+            kDefaultShowPager, kDefaultShowTaskManager,
             kDefaultShowClock);
   }
 
@@ -580,15 +579,6 @@ class MultiDockModel : public QObject {
     setDockProperty(dockId, kGeneralCategory, kShowClock, value);
   }
 
-  bool showTrash(int dockId) const {
-    return dockProperty(dockId, kGeneralCategory, kShowTrash,
-                        kDefaultShowTrash);
-  }
-
-  void setShowTrash(int dockId, bool value) {
-    setDockProperty(dockId, kGeneralCategory, kShowTrash, value);
-  }
-
   QStringList launchers(int dockId) const {
     return dockProperty(dockId, kGeneralCategory, kLaunchers, QString())
         .split(";", Qt::SkipEmptyParts);
@@ -673,7 +663,6 @@ class MultiDockModel : public QObject {
   static constexpr char kShowClock[] = "showClock";
   static constexpr char kShowPager[] = "showPager";
   static constexpr char kShowTaskManager[] = "showTaskManager";
-  static constexpr char kShowTrash[] = "showTrash";
   static constexpr char kLaunchers[] = "launchers";
 
   // Global appearance config's categories/properties.

@@ -53,7 +53,6 @@
 #include "multi_dock_view.h"
 #include "program.h"
 #include "separator.h"
-#include "trash.h"
 #include <display/window_system.h>
 #include <utils/draw_utils.h>
 #include <utils/icon_utils.h>
@@ -72,7 +71,6 @@ DockPanel::DockPanel(MultiDockView* parent, MultiDockModel* model, int dockId)
       visibility_(PanelVisibility::AlwaysVisible),
       showPager_(false),
       showClock_(false),
-      showTrash_(false),
       aboutDialog_(QMessageBox::Information, "About Crystal Dock",
                    QString("<h3>Crystal Dock ") + kVersion + "</h3>"
                    + "<p>Copyright (C) 2025 Viet Dang (dangvd@gmail.com)"
@@ -854,12 +852,8 @@ void DockPanel::dragEnterEvent(QDragEnterEvent* e) {
   if (e->mimeData()->hasUrls()) {
     e->acceptProposedAction();
     
-    for (const auto& item : items_) {
-      Trash* trash = dynamic_cast<Trash*>(item.get());
-      if (trash) {
-        trash->setAcceptDrops(true);
-      }
-    }
+    // for (const auto& item : items_) {
+    // }
   }
 }
 
@@ -870,14 +864,8 @@ void DockPanel::dragMoveEvent(QDragMoveEvent* e) {
 }
 
 void DockPanel::dropEvent(QDropEvent* e) {
-  for (const auto& item : items_) {
-    Trash* trash = dynamic_cast<Trash*>(item.get());
-    if (trash) {
-      trash->setAcceptDrops(false);
-      trash->dropEvent(e);
-      return;
-    }
-  }
+  // for (const auto& item : items_) {
+  // }
 }
 
 void DockPanel::initUi() {
@@ -885,7 +873,6 @@ void DockPanel::initUi() {
   initPager();
   initLaunchers();
   initTasks();
-  initTrash();
   initClock();
   initLayoutVars();
   updateLayout();
@@ -918,9 +905,6 @@ void DockPanel::createMenu() {
   taskManagerAction_ = extraComponents->addAction(QString("Task Manager"), this,
       SLOT(toggleTaskManager()));
   taskManagerAction_->setCheckable(true);
-  trashAction_ = extraComponents->addAction(QString("Trash"), this,
-      SLOT(toggleTrash()));
-  trashAction_->setCheckable(true);
   clockAction_ = extraComponents->addAction(QString("Clock"), this,
                                             SLOT(toggleClock()));
   clockAction_->setCheckable(true);
@@ -1083,9 +1067,6 @@ void DockPanel::loadDockConfig() {
 
   showClock_ = model_->showClock(dockId_);
   clockAction_->setChecked(showClock_);
-
-  showTrash_ = model_->showTrash(dockId_);
-  trashAction_->setChecked(showTrash_);
 }
 
 void DockPanel::saveDockConfig() {
@@ -1096,7 +1077,6 @@ void DockPanel::saveDockConfig() {
   model_->setShowPager(dockId_, showPager_);
   model_->setShowTaskManager(dockId_, taskManagerAction_->isChecked());
   model_->setShowClock(dockId_, showClock_);
-  model_->setShowTrash(dockId_, showTrash_);
   model_->saveDockConfig(dockId_);
 }
 
@@ -1163,7 +1143,6 @@ void DockPanel::reloadTasks() {
   items_.resize(itemsToKeep);
   initLaunchers();
   initTasks();
-  initTrash();
   initClock();
   resizeTaskManager();
 }
@@ -1282,13 +1261,6 @@ bool DockPanel::hasTask(void* window) {
 void DockPanel::initClock() {
   if (showClock_) {
     items_.push_back(std::make_unique<Clock>(
-        this, model_, orientation_, minSize_, maxSize_));
-  }
-}
-
-void DockPanel::initTrash() {
-  if (showTrash_) {
-    items_.push_back(std::make_unique<Trash>(
         this, model_, orientation_, minSize_, maxSize_));
   }
 }

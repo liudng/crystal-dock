@@ -234,22 +234,6 @@
     </property>
    </item>
   </widget>
-  <widget class="QCheckBox" name="showTrash">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>220</y>
-     <width>300</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Trash</string>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-  </widget>
  </widget>
  <resources/>
  <connections>
