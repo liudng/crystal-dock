@@ -54,7 +54,6 @@
 #include "program.h"
 #include "separator.h"
 #include "trash.h"
-#include "version_checker.h"
 #include "volume_control.h"
 #include <display/window_system.h>
 #include <utils/draw_utils.h>
@@ -894,7 +893,6 @@ void DockPanel::initUi() {
   initTasks();
   initTrash();
   initVolumeControl();
-  initVersionChecker();
   initClock();
   initLayoutVars();
   updateLayout();
@@ -933,9 +931,6 @@ void DockPanel::createMenu() {
   volumeControlAction_ = extraComponents->addAction(QString("Volume Control"), this,
                                                     SLOT(toggleVolumeControl()));
   volumeControlAction_->setCheckable(true);
-  versionCheckerAction_ = extraComponents->addAction(QString("Version Checker"), this,
-                                                     SLOT(toggleVersionChecker()));
-  versionCheckerAction_->setCheckable(true);
   clockAction_ = extraComponents->addAction(QString("Clock"), this,
                                             SLOT(toggleClock()));
   clockAction_->setCheckable(true);
@@ -1102,9 +1097,6 @@ void DockPanel::loadDockConfig() {
   showTrash_ = model_->showTrash(dockId_);
   trashAction_->setChecked(showTrash_);
 
-  showVersionChecker_ = model_->showVersionChecker(dockId_);
-  versionCheckerAction_->setChecked(showVersionChecker_);
-
   showVolumeControl_ = model_->showVolumeControl(dockId_);
   volumeControlAction_->setChecked(showVolumeControl_);
 }
@@ -1118,7 +1110,6 @@ void DockPanel::saveDockConfig() {
   model_->setShowTaskManager(dockId_, taskManagerAction_->isChecked());
   model_->setShowClock(dockId_, showClock_);
   model_->setShowTrash(dockId_, showTrash_);
-  model_->setShowVersionChecker(dockId_, showVersionChecker_);
   model_->setShowVolumeControl(dockId_, showVolumeControl_);
   model_->saveDockConfig(dockId_);
 }
@@ -1188,7 +1179,6 @@ void DockPanel::reloadTasks() {
   initTasks();
   initTrash();
   initVolumeControl();
-  initVersionChecker();
   initClock();
   resizeTaskManager();
 }
@@ -1314,13 +1304,6 @@ void DockPanel::initClock() {
 void DockPanel::initTrash() {
   if (showTrash_) {
     items_.push_back(std::make_unique<Trash>(
-        this, model_, orientation_, minSize_, maxSize_));
-  }
-}
-
-void DockPanel::initVersionChecker() {
-  if (showVersionChecker_) {
-    items_.push_back(std::make_unique<VersionChecker>(
         this, model_, orientation_, minSize_, maxSize_));
   }
 }

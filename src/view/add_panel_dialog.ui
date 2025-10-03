@@ -266,22 +266,6 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QCheckBox" name="showVersionChecker">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>300</y>
-     <width>300</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Version Checker</string>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-  </widget>
  </widget>
  <resources/>
  <connections>

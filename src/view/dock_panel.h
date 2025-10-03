@@ -193,12 +193,6 @@ class DockPanel : public QWidget {
     saveDockConfig();
   }
 
-  void toggleVersionChecker() {
-    showVersionChecker_ = !showVersionChecker_;
-    reload();
-    saveDockConfig();
-  }
-
   void toggleVolumeControl() {
     showVolumeControl_ = !showVolumeControl_;
     reload();
@@ -294,10 +288,6 @@ class DockPanel : public QWidget {
     return showTrash_ ? 1 : 0;
   }
 
-  int versionCheckerItemCount() const {
-    return showVersionChecker_ ? 1 : 0;
-  }
-
   int volumeControlItemCount() const {
     return showVolumeControl_ ? 1 : 0;
   }
@@ -330,8 +320,6 @@ class DockPanel : public QWidget {
   void initTrash();
 
   void initVolumeControl();
-
-  void initVersionChecker();
 
   void initLayoutVars();
 
@@ -393,7 +381,6 @@ class DockPanel : public QWidget {
   bool showPager_;
   bool showClock_;
   bool showTrash_;
-  bool showVersionChecker_;
   bool showVolumeControl_;
   int minSize_;
   int maxSize_;
@@ -448,7 +435,6 @@ class DockPanel : public QWidget {
   QAction* taskManagerAction_;
   QAction* clockAction_;
   QAction* trashAction_;
-  QAction* versionCheckerAction_;
   QAction* volumeControlAction_;
   QAction* floatingStyleAction_;
   QAction* glass3DStyleAction_;

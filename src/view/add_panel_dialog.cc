@@ -72,7 +72,6 @@ void AddPanelDialog::setMode(Mode mode) {
   ui->showTaskManager->move(120, 180);
   ui->showTrash->move(120, 220);
   ui->showVolumeControl->move(120, 260);
-  ui->showVersionChecker->move(120, 300);
   ui->showClock->move(120, 340);
   ui->styleLabel->move(90, 400);
   ui->style->move(320, 385);
@@ -96,7 +95,6 @@ void AddPanelDialog::setMode(Mode mode) {
   ui->showTaskManager->setChecked(mode == Mode::Welcome);
   ui->showTrash->setChecked(mode == Mode::Welcome);
   ui->showVolumeControl->setChecked(mode == Mode::Welcome);
-  ui->showVersionChecker->setChecked(mode == Mode::Welcome);
   ui->showClock->setChecked(mode == Mode::Welcome);
 
   ui->componentsLabel->setVisible(mode != Mode::Clone);
@@ -105,7 +103,6 @@ void AddPanelDialog::setMode(Mode mode) {
   ui->showTaskManager->setVisible(mode != Mode::Clone);
   ui->showTrash->setVisible(mode != Mode::Clone);
   ui->showVolumeControl->setVisible(mode != Mode::Clone);
-  ui->showVersionChecker->setVisible(mode != Mode::Clone);
   ui->showClock->setVisible(mode != Mode::Clone);
 
   if (mode != Mode::Clone && !WindowSystem::hasVirtualDesktopManager()) {
@@ -115,7 +112,6 @@ void AddPanelDialog::setMode(Mode mode) {
     moveY(ui->showTaskManager, kDeltaY);
     moveY(ui->showTrash, kDeltaY);
     moveY(ui->showVolumeControl, kDeltaY);
-    moveY(ui->showVersionChecker, kDeltaY);
     moveY(ui->showClock, kDeltaY);
     moveY(ui->styleLabel, kDeltaY);
     moveY(ui->style, kDeltaY);
@@ -185,7 +181,7 @@ void AddPanelDialog::accept() {
         position, screen, ui->showApplicationMenu->isChecked(),
         ui->showPager->isChecked(), ui->showTaskManager->isChecked(),
         ui->showTrash->isChecked(), ui->showVolumeControl->isChecked(),
-        ui->showVersionChecker->isChecked(), ui->showClock->isChecked());
+        ui->showClock->isChecked());
     model_->maybeAddDockForMultiScreen();
   }
 }
