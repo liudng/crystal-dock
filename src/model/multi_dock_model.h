@@ -82,8 +82,6 @@ constexpr bool kDefaultShowPager = false;
 constexpr bool kDefaultShowTaskManager = true;
 constexpr bool kDefaultShowClock = true;
 constexpr bool kDefaultShowTrash = true;
-constexpr bool kDefaultShowVolumeControl = true;
-constexpr int kDefaultVolumeScrollStep = 2;
 constexpr PanelStyle kDefaultPanelStyle = PanelStyle::Glass3D_Floating;
 
 constexpr char kDefaultApplicationMenuName[] = "Applications";
@@ -122,12 +120,11 @@ class MultiDockModel : public QObject {
   // Adds a new dock in the specified position and screen.
   void addDock(PanelPosition position, int screen, bool showApplicationMenu,
                bool showPager, bool showTaskManager, bool showTrash,
-               bool showVolumeControl, bool showClock);
+               bool showClock);
 
   void addDock() {
     addDock(PanelPosition::Bottom, 0, kDefaultShowApplicationMenu,
             kDefaultShowPager, kDefaultShowTaskManager, kDefaultShowTrash,
-            kDefaultShowVolumeControl,
             kDefaultShowClock);
   }
 
@@ -592,24 +589,6 @@ class MultiDockModel : public QObject {
     setDockProperty(dockId, kGeneralCategory, kShowTrash, value);
   }
 
-  bool showVolumeControl(int dockId) const {
-    return dockProperty(dockId, kGeneralCategory, kShowVolumeControl,
-                        kDefaultShowVolumeControl);
-  }
-
-  void setShowVolumeControl(int dockId, bool value) {
-    setDockProperty(dockId, kGeneralCategory, kShowVolumeControl, value);
-  }
-
-  int volumeScrollStep() const {
-    return appearanceProperty(kVolumeControlCategory, kVolumeScrollStep,
-                              kDefaultVolumeScrollStep);
-  }
-
-  void setVolumeScrollStep(int value) {
-    setAppearanceProperty(kVolumeControlCategory, kVolumeScrollStep, value);
-  }
-
   QStringList launchers(int dockId) const {
     return dockProperty(dockId, kGeneralCategory, kLaunchers, QString())
         .split(";", Qt::SkipEmptyParts);
@@ -695,7 +674,6 @@ class MultiDockModel : public QObject {
   static constexpr char kShowPager[] = "showPager";
   static constexpr char kShowTaskManager[] = "showTaskManager";
   static constexpr char kShowTrash[] = "showTrash";
-  static constexpr char kShowVolumeControl[] = "showVolumeControl";
   static constexpr char kLaunchers[] = "launchers";
 
   // Global appearance config's categories/properties.
@@ -744,9 +722,6 @@ class MultiDockModel : public QObject {
   static constexpr char kUse24HourClock[] = "use24HourClock";
   static constexpr char kFontScaleFactor[] = "fontScaleFactor";
   static constexpr char kClockFontFamily[] = "clockFontFamily";
-
-  static constexpr char kVolumeControlCategory[] = "VolumeControl";
-  static constexpr char kVolumeScrollStep[] = "volumeScrollStep";
 
   template <typename T>
   T appearanceProperty(QString category, QString name, T defaultValue) const {

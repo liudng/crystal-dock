@@ -250,22 +250,6 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QCheckBox" name="showVolumeControl">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>260</y>
-     <width>300</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Volume Control</string>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-  </widget>
  </widget>
  <resources/>
  <connections>

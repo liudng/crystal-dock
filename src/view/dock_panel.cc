@@ -54,7 +54,6 @@
 #include "program.h"
 #include "separator.h"
 #include "trash.h"
-#include "volume_control.h"
 #include <display/window_system.h>
 #include <utils/draw_utils.h>
 #include <utils/icon_utils.h>
@@ -831,13 +830,8 @@ void DockPanel::wheelEvent(QWheelEvent* e) {
     return;
   }
 
-  if (activeItem_ >= 0 && activeItem_ < static_cast<int>(items_.size())) {
-    // Check if the active item is a VolumeControl
-    VolumeControl* volumeControl = dynamic_cast<VolumeControl*>(items_[activeItem_].get());
-    if (volumeControl) {
-      volumeControl->wheelEvent(e);
-    }
-  }
+  // if (activeItem_ >= 0 && activeItem_ < static_cast<int>(items_.size())) {
+  // }
 }
 
 void DockPanel::enterEvent (QEnterEvent* e) {
@@ -892,7 +886,6 @@ void DockPanel::initUi() {
   initLaunchers();
   initTasks();
   initTrash();
-  initVolumeControl();
   initClock();
   initLayoutVars();
   updateLayout();
@@ -928,9 +921,6 @@ void DockPanel::createMenu() {
   trashAction_ = extraComponents->addAction(QString("Trash"), this,
       SLOT(toggleTrash()));
   trashAction_->setCheckable(true);
-  volumeControlAction_ = extraComponents->addAction(QString("Volume Control"), this,
-                                                    SLOT(toggleVolumeControl()));
-  volumeControlAction_->setCheckable(true);
   clockAction_ = extraComponents->addAction(QString("Clock"), this,
                                             SLOT(toggleClock()));
   clockAction_->setCheckable(true);
@@ -1096,9 +1086,6 @@ void DockPanel::loadDockConfig() {
 
   showTrash_ = model_->showTrash(dockId_);
   trashAction_->setChecked(showTrash_);
-
-  showVolumeControl_ = model_->showVolumeControl(dockId_);
-  volumeControlAction_->setChecked(showVolumeControl_);
 }
 
 void DockPanel::saveDockConfig() {
@@ -1110,7 +1097,6 @@ void DockPanel::saveDockConfig() {
   model_->setShowTaskManager(dockId_, taskManagerAction_->isChecked());
   model_->setShowClock(dockId_, showClock_);
   model_->setShowTrash(dockId_, showTrash_);
-  model_->setShowVolumeControl(dockId_, showVolumeControl_);
   model_->saveDockConfig(dockId_);
 }
 
@@ -1178,7 +1164,6 @@ void DockPanel::reloadTasks() {
   initLaunchers();
   initTasks();
   initTrash();
-  initVolumeControl();
   initClock();
   resizeTaskManager();
 }
@@ -1304,13 +1289,6 @@ void DockPanel::initClock() {
 void DockPanel::initTrash() {
   if (showTrash_) {
     items_.push_back(std::make_unique<Trash>(
-        this, model_, orientation_, minSize_, maxSize_));
-  }
-}
-
-void DockPanel::initVolumeControl() {
-  if (showVolumeControl_) {
-    items_.push_back(std::make_unique<VolumeControl>(
         this, model_, orientation_, minSize_, maxSize_));
   }
 }

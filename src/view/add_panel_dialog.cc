@@ -71,7 +71,6 @@ void AddPanelDialog::setMode(Mode mode) {
   // reset positions of fields and size.
   ui->showTaskManager->move(120, 180);
   ui->showTrash->move(120, 220);
-  ui->showVolumeControl->move(120, 260);
   ui->showClock->move(120, 340);
   ui->styleLabel->move(90, 400);
   ui->style->move(320, 385);
@@ -94,7 +93,6 @@ void AddPanelDialog::setMode(Mode mode) {
   ui->showPager->setChecked(false);
   ui->showTaskManager->setChecked(mode == Mode::Welcome);
   ui->showTrash->setChecked(mode == Mode::Welcome);
-  ui->showVolumeControl->setChecked(mode == Mode::Welcome);
   ui->showClock->setChecked(mode == Mode::Welcome);
 
   ui->componentsLabel->setVisible(mode != Mode::Clone);
@@ -102,7 +100,6 @@ void AddPanelDialog::setMode(Mode mode) {
   ui->showPager->setVisible(mode != Mode::Clone);
   ui->showTaskManager->setVisible(mode != Mode::Clone);
   ui->showTrash->setVisible(mode != Mode::Clone);
-  ui->showVolumeControl->setVisible(mode != Mode::Clone);
   ui->showClock->setVisible(mode != Mode::Clone);
 
   if (mode != Mode::Clone && !WindowSystem::hasVirtualDesktopManager()) {
@@ -111,7 +108,6 @@ void AddPanelDialog::setMode(Mode mode) {
     constexpr int kDeltaY = -40;
     moveY(ui->showTaskManager, kDeltaY);
     moveY(ui->showTrash, kDeltaY);
-    moveY(ui->showVolumeControl, kDeltaY);
     moveY(ui->showClock, kDeltaY);
     moveY(ui->styleLabel, kDeltaY);
     moveY(ui->style, kDeltaY);
@@ -180,7 +176,7 @@ void AddPanelDialog::accept() {
     model_->addDock(
         position, screen, ui->showApplicationMenu->isChecked(),
         ui->showPager->isChecked(), ui->showTaskManager->isChecked(),
-        ui->showTrash->isChecked(), ui->showVolumeControl->isChecked(),
+        ui->showTrash->isChecked(),
         ui->showClock->isChecked());
     model_->maybeAddDockForMultiScreen();
   }
