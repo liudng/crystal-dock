@@ -24,11 +24,7 @@
 #include <QProcess>
 #include <QStringList>
 
-#include "hyprland_desktop_env.h"
-#include "kde_desktop_env.h"
 #include "labwc_desktop_env.h"
-#include "lxqt_desktop_env.h"
-#include "niri_desktop_env.h"
 #include "wayfire_desktop_env.h"
 #include <model/application_menu_config.h>
 #include <model/multi_dock_model.h>
@@ -37,21 +33,9 @@ namespace crystaldock {
 
 DesktopEnv* DesktopEnv::getDesktopEnv() {
   QString currentDesktopEnv = getDesktopEnvName();
-  if (currentDesktopEnv == "Hyprland") {
-    static std::unique_ptr<HyprlandDesktopEnv> hyprland(new HyprlandDesktopEnv);
-    return hyprland.get();
-  } else if (currentDesktopEnv == "KDE") {
-    static std::unique_ptr<KdeDesktopEnv> kde(new KdeDesktopEnv);
-    return kde.get();
-  } else if (currentDesktopEnv == "labwc") {
+  if (currentDesktopEnv == "labwc") {
     static std::unique_ptr<LabwcDesktopEnv> labwc(new LabwcDesktopEnv);
     return labwc.get();
-  } else if (currentDesktopEnv == "LXQt") {
-    static std::unique_ptr<LxqtDesktopEnv> lxqt(new LxqtDesktopEnv);
-    return lxqt.get();
-  } else if (currentDesktopEnv == "niri") {
-    static std::unique_ptr<NiriDesktopEnv> niri(new NiriDesktopEnv);
-    return niri.get();
   } else if (currentDesktopEnv == "Wayfire") {
     static std::unique_ptr<WayfireDesktopEnv> wayfire(new WayfireDesktopEnv);
     return wayfire.get();

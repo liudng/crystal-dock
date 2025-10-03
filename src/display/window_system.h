@@ -36,9 +36,6 @@
 #include <QWidget>
 #include <QWindow>
 
-#include "kde_screen_edge.h"
-#include "plasma_virtual_desktop.h"
-#include "plasma_window_management.h"
 #include "wlr_foreign_toplevel_management.h"
 
 #include <LayerShellQt/Window>
@@ -237,10 +234,6 @@ class WindowSystem : public QObject {
 
 
   static void initScreens();
-
-  static org_kde_plasma_virtual_desktop_management* kde_virtual_desktop_management_;
-  static org_kde_plasma_window_management* kde_window_management_;
-  static kde_screen_edge_manager_v1* kde_screen_edge_manager_;
 
   static zwlr_foreign_toplevel_manager_v1* wlr_window_manager_;
 

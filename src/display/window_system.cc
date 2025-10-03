@@ -10,9 +10,6 @@
 #include <LayerShellQt/Shell>
 #include <LayerShellQt/Window>
 
-#include "kde_auto_hide_manager.h"
-#include "kde_virtual_desktop_manager.h"
-#include "kde_window_manager.h"
 #include "wlr_window_manager.h"
 
 namespace crystaldock {
@@ -30,10 +27,6 @@ LayerShellQt::Window* getLayerShellWin(QWidget* widget) {
 }
 
 }  // namespace
-
-org_kde_plasma_virtual_desktop_management* WindowSystem::kde_virtual_desktop_management_;
-org_kde_plasma_window_management* WindowSystem::kde_window_management_;
-kde_screen_edge_manager_v1* WindowSystem::kde_screen_edge_manager_;
 
 zwlr_foreign_toplevel_manager_v1* WindowSystem::wlr_window_manager_;
 
@@ -56,27 +49,14 @@ std::unique_ptr<QDBusInterface> WindowSystem::activityManager_;
   // wait for the "initial" set of globals to appear
   wl_display_roundtrip(display);
 
-  if (!kde_window_management_ && !wlr_window_manager_) {
+  if (!wlr_window_manager_) {
     std::cerr << "Failed to bind required Wayland interfaces" << std::endl;
     return false;
   }
 
-  if (kde_virtual_desktop_management_) {
-    KdeVirtualDesktopManager::init(kde_virtual_desktop_management_);
-    KdeVirtualDesktopManager::bindVirtualDesktopManagerFunctions(&virtualDesktopManager_);
-  }
-
-  if (kde_window_management_) {
-    KdeWindowManager::init(kde_window_management_);
-    KdeWindowManager::bindWindowManagerFunctions(&windowManager_);
-  } else if (wlr_window_manager_) {
+  if (wlr_window_manager_) {
     WlrWindowManager::init(wlr_window_manager_);
     WlrWindowManager::bindWindowManagerFunctions(&windowManager_);
-  }
-
-  if (kde_screen_edge_manager_) {
-    KdeAutoHideManager::init(kde_screen_edge_manager_);
-    KdeAutoHideManager::bindAutoHideManagerFunctions(&autoHideManager_);
   }
 
   LayerShellQt::Shell::useLayerShell();
@@ -99,11 +79,11 @@ std::unique_ptr<QDBusInterface> WindowSystem::activityManager_;
 }
 
 /* static */ bool WindowSystem::hasVirtualDesktopManager() {
-  return kde_virtual_desktop_management_ != nullptr;
+  return false;
 }
 
 /* static */ bool WindowSystem::hasAutoHideManager() {
-  return kde_screen_edge_manager_ != nullptr;
+  return false;
 }
 
 /* static */ bool WindowSystem::hasActivityManager() {
@@ -173,31 +153,7 @@ void WindowSystem::initScreens() {
     uint32_t name,
     const char* interface,
     uint32_t version) {
-  if (std::string(interface) == "org_kde_plasma_virtual_desktop_management") {
-    kde_virtual_desktop_management_ =
-        reinterpret_cast<org_kde_plasma_virtual_desktop_management*>(wl_registry_bind(
-            registry, name, &org_kde_plasma_virtual_desktop_management_interface, 2));
-    if (!kde_virtual_desktop_management_) {
-      std::cerr << "Failed to bind org_kde_plasma_virtual_desktop_management Wayland interface"
-                << std::endl;
-    }
-  } else if (std::string(interface) == "org_kde_plasma_window_management") {
-    kde_window_management_ =
-        reinterpret_cast<org_kde_plasma_window_management*>(wl_registry_bind(
-            registry, name, &org_kde_plasma_window_management_interface, 16));
-    if (!kde_window_management_) {
-      std::cerr << "Failed to bind org_kde_plasma_window_management Wayland interface. "
-                << "Maybe another client has already bound it?" << std::endl;
-    }
-  } else if (std::string(interface) == "kde_screen_edge_manager_v1") {
-    kde_screen_edge_manager_ =
-        reinterpret_cast<kde_screen_edge_manager_v1*>(wl_registry_bind(
-            registry, name, &kde_screen_edge_manager_v1_interface, 1));
-    if (!kde_screen_edge_manager_) {
-      std::cerr << "Failed to bind kde_screen_edge_manager_v1 Wayland interface"
-                << std::endl;
-    }
-  } else if (std::string(interface) == "zwlr_foreign_toplevel_manager_v1") {
+  if (std::string(interface) == "zwlr_foreign_toplevel_manager_v1") {
     wlr_window_manager_ =
         reinterpret_cast<zwlr_foreign_toplevel_manager_v1*>(wl_registry_bind(
             registry, name, &zwlr_foreign_toplevel_manager_v1_interface, 3));

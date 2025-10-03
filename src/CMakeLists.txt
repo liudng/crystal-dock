@@ -20,19 +20,9 @@ find_package(LayerShellQt 6.0 REQUIRED)
 
 set(SRCS
     desktop/desktop_env.cc
-    desktop/hyprland_desktop_env.cc
-    desktop/kde_desktop_env.cc
     desktop/labwc_desktop_env.cc
-    desktop/lxqt_desktop_env.cc
-    desktop/niri_desktop_env.cc
     desktop/wayfire_desktop_env.cc
     display/window_system.cc
-    display/kde_auto_hide_manager.cc
-    display/kde_virtual_desktop_manager.cc
-    display/kde_window_manager.cc
-    display/kde_screen_edge.c
-    display/plasma_virtual_desktop.c
-    display/plasma_window_management.c
     display/wlr_foreign_toplevel_management.c
     display/wlr_window_manager.cc
     model/application_menu_config.cc
@@ -63,19 +53,9 @@ set(SRCS
     view/wallpaper_settings_dialog.cc
     utils/desktop_file.cc
     desktop/desktop_env.h
-    desktop/hyprland_desktop_env.h
-    desktop/kde_desktop_env.h
     desktop/labwc_desktop_env.h
-    desktop/lxqt_desktop_env.h
-    desktop/niri_desktop_env.h
     desktop/wayfire_desktop_env.h
     display/window_system.h
-    display/kde_auto_hide_manager.h
-    display/kde_virtual_desktop_manager.h
-    display/kde_window_manager.h
-    display/kde_screen_edge.h
-    display/plasma_virtual_desktop.h
-    display/plasma_window_management.h
     display/wlr_foreign_toplevel_management.h
     display/wlr_window_manager.h
     model/application_menu_config.h
