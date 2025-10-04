@@ -89,19 +89,15 @@ void AddPanelDialog::setMode(Mode mode) {
                            : QString("Please set up your new panel."));
 
   ui->showApplicationMenu->setChecked(mode == Mode::Welcome);
-  ui->showPager->setChecked(false);
   ui->showTaskManager->setChecked(mode == Mode::Welcome);
   ui->showClock->setChecked(mode == Mode::Welcome);
 
   ui->componentsLabel->setVisible(mode != Mode::Clone);
   ui->showApplicationMenu->setVisible(mode != Mode::Clone);
-  ui->showPager->setVisible(mode != Mode::Clone);
   ui->showTaskManager->setVisible(mode != Mode::Clone);
   ui->showClock->setVisible(mode != Mode::Clone);
 
   if (mode != Mode::Clone && !WindowSystem::hasVirtualDesktopManager()) {
-    ui->showPager->setChecked(false);
-    ui->showPager->setVisible(false);
     constexpr int kDeltaY = -40;
     moveY(ui->showTaskManager, kDeltaY);
     moveY(ui->showClock, kDeltaY);
@@ -171,7 +167,7 @@ void AddPanelDialog::accept() {
     }
     model_->addDock(
         position, screen, ui->showApplicationMenu->isChecked(),
-        ui->showPager->isChecked(), ui->showTaskManager->isChecked(),
+        ui->showTaskManager->isChecked(),
         ui->showClock->isChecked());
     model_->maybeAddDockForMultiScreen();
   }

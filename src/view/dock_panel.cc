@@ -69,7 +69,6 @@ DockPanel::DockPanel(MultiDockView* parent, MultiDockModel* model, int dockId)
       model_(model),
       dockId_(dockId),
       visibility_(PanelVisibility::AlwaysVisible),
-      showPager_(false),
       showClock_(false),
       aboutDialog_(QMessageBox::Information, "About Crystal Dock",
                    QString("<h3>Crystal Dock ") + kVersion + "</h3>"
@@ -101,8 +100,6 @@ DockPanel::DockPanel(MultiDockView* parent, MultiDockModel* model, int dockId)
 
   connect(animationTimer_.get(), SIGNAL(timeout()), this,
       SLOT(updateAnimation()));
-  connect(WindowSystem::self(), SIGNAL(numberOfDesktopsChanged(int)),
-      this, SLOT(updatePager()));
   connect(WindowSystem::self(), SIGNAL(currentDesktopChanged(std::string_view)),
           this, SLOT(onCurrentDesktopChanged()));
   connect(WindowSystem::self(), SIGNAL(windowStateChanged(const WindowInfo*)),
@@ -174,12 +171,6 @@ void DockPanel::setStrut() {
       setStrut(0);
       break;
   }
-}
-
-void DockPanel::togglePager() {
-  showPager_ = !showPager_;
-  reload();
-  saveDockConfig();
 }
 
 void DockPanel::setScreen(int screen) {
@@ -862,7 +853,6 @@ void DockPanel::dropEvent(QDropEvent* e) {
 
 void DockPanel::initUi() {
   initApplicationMenu();
-  initPager();
   initLaunchers();
   initTasks();
   initClock();
@@ -891,9 +881,6 @@ void DockPanel::createMenu() {
   applicationMenuAction_ = extraComponents->addAction(QString("Application Menu"), this,
       SLOT(toggleApplicationMenu()));
   applicationMenuAction_->setCheckable(true);
-  pagerAction_ = extraComponents->addAction(QString("Pager"), this,
-      SLOT(togglePager()));
-  pagerAction_->setCheckable(true);
   taskManagerAction_ = extraComponents->addAction(QString("Task Manager"), this,
       SLOT(toggleTaskManager()));
   taskManagerAction_->setCheckable(true);
@@ -1051,10 +1038,6 @@ void DockPanel::loadDockConfig() {
   showApplicationMenu_ = model_->showApplicationMenu(dockId_);
   applicationMenuAction_->setChecked(showApplicationMenu_);
 
-  showPager_ = model_->showPager(dockId_) && WindowSystem::hasVirtualDesktopManager();
-  pagerAction_->setVisible(WindowSystem::hasVirtualDesktopManager());
-  pagerAction_->setChecked(showPager_);
-
   taskManagerAction_->setChecked(model_->showTaskManager(dockId_));
 
   showClock_ = model_->showClock(dockId_);
@@ -1066,7 +1049,6 @@ void DockPanel::saveDockConfig() {
   model_->setScreen(dockId_, screen_);
   model_->setVisibility(dockId_, visibility_);
   model_->setShowApplicationMenu(dockId_, showApplicationMenu_);
-  model_->setShowPager(dockId_, showPager_);
   model_->setShowTaskManager(dockId_, taskManagerAction_->isChecked());
   model_->setShowClock(dockId_, showClock_);
   model_->saveDockConfig(dockId_);
@@ -1105,15 +1087,6 @@ void DockPanel::initLaunchers() {
   }
 }
 
-void DockPanel::initPager() {
-  if (showPager_) {
-    for (const auto& desktop : WindowSystem::desktops()) {
-      items_.push_back(std::make_unique<DesktopSelector>(
-          this, model_, orientation_, minSize_, maxSize_, desktop, screen_));
-    }
-  }
-}
-
 void DockPanel::initTasks() {
   if (!showTaskManager()) {
     return;
@@ -1131,7 +1104,7 @@ void DockPanel::reloadTasks() {
     return;
   }
 
-  const int itemsToKeep = applicationMenuItemCount() + pagerItemCount();
+  const int itemsToKeep = applicationMenuItemCount();
   items_.resize(itemsToKeep);
   initLaunchers();
   initTasks();
@@ -1553,8 +1526,7 @@ void DockPanel::resizeTaskManager() {
     }
   }
 
-  const int itemsToKeep = (showApplicationMenu_ ? 1 : 0) +
-      (showPager_ ? WindowSystem::numberOfDesktops() : 0);
+  const int itemsToKeep = (showApplicationMenu_ ? 1 : 0);
   int left = 0;
   int top = 0;
   for (int i = 0; i < itemCount(); ++i) {

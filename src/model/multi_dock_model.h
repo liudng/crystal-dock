@@ -78,7 +78,6 @@ constexpr float kSmallClockFontScaleFactor = 0.6;
 constexpr PanelVisibility kDefaultVisibility = PanelVisibility::AlwaysVisible;
 constexpr bool kDefaultAutoHide = false;
 constexpr bool kDefaultShowApplicationMenu = true;
-constexpr bool kDefaultShowPager = false;
 constexpr bool kDefaultShowTaskManager = true;
 constexpr bool kDefaultShowClock = true;
 constexpr PanelStyle kDefaultPanelStyle = PanelStyle::Glass3D_Floating;
@@ -118,12 +117,12 @@ class MultiDockModel : public QObject {
 
   // Adds a new dock in the specified position and screen.
   void addDock(PanelPosition position, int screen, bool showApplicationMenu,
-               bool showPager, bool showTaskManager,
+               bool showTaskManager,
                bool showClock);
 
   void addDock() {
     addDock(PanelPosition::Bottom, 0, kDefaultShowApplicationMenu,
-            kDefaultShowPager, kDefaultShowTaskManager,
+            kDefaultShowTaskManager,
             kDefaultShowClock);
   }
 
@@ -535,14 +534,6 @@ class MultiDockModel : public QObject {
     setDockProperty(dockId, kGeneralCategory, kShowApplicationMenu, value);
   }
 
-  bool showPager(int dockId) const {
-    return dockProperty(dockId, kGeneralCategory, kShowPager, kDefaultShowPager);
-  }
-
-  void setShowPager(int dockId, bool value) {
-    setDockProperty(dockId, kGeneralCategory, kShowPager, value);
-  }
-
   bool showTaskManager(int dockId) const {
     return dockProperty(dockId, kGeneralCategory, kShowTaskManager,
                         kDefaultShowTaskManager);
@@ -598,9 +589,6 @@ class MultiDockModel : public QObject {
     }
   }
 
-  // Whether any dock has a pager.
-  bool hasPager() const;
-
   const std::vector<Category>& applicationMenuCategories() const {
     return applicationMenuConfig_.categories();
   }
@@ -640,7 +628,6 @@ class MultiDockModel : public QObject {
   static constexpr char kScreen[] = "screen";
   static constexpr char kShowApplicationMenu[] = "showApplicationMenu";
   static constexpr char kShowClock[] = "showClock";
-  static constexpr char kShowPager[] = "showPager";
   static constexpr char kShowTaskManager[] = "showTaskManager";
   static constexpr char kLaunchers[] = "launchers";
 

@@ -32,7 +32,7 @@ namespace crystaldock {
 
 class DockPanel;
 
-// Base class for all dock items, e.g. launchers and pager icons.
+// Base class for all dock items, e.g. launchers icons.
 //
 // It's a design decision that DockItem is not a sub-class of QWidget, to make
 // the dock's parabolic zooming effect smoother.

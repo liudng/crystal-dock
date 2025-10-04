@@ -33,7 +33,6 @@ constexpr char MultiDockModel::kPosition[];
 constexpr char MultiDockModel::kScreen[];
 constexpr char MultiDockModel::kShowApplicationMenu[];
 constexpr char MultiDockModel::kShowClock[];
-constexpr char MultiDockModel::kShowPager[];
 constexpr char MultiDockModel::kShowTaskManager[];
 constexpr char MultiDockModel::kVisibility[];
 constexpr char MultiDockModel::kPanelStyle[];
@@ -61,7 +60,6 @@ constexpr char MultiDockModel::kApplicationMenuCategory[];
 constexpr char MultiDockModel::kLabel[];
 constexpr char MultiDockModel::kFontSize[];
 constexpr char MultiDockModel::kBackgroundAlpha[];
-constexpr char MultiDockModel::kPagerCategory[];
 constexpr char MultiDockModel::kShowDesktopNumber[];
 constexpr char MultiDockModel::kTaskManagerCategory[];
 constexpr char MultiDockModel::kCurrentDesktopTasksOnly[];
@@ -107,7 +105,7 @@ void MultiDockModel::loadDocks() {
 }
 
 void MultiDockModel::addDock(PanelPosition position, int screen,
-                             bool showApplicationMenu, bool showPager,
+                             bool showApplicationMenu,
                              bool showTaskManager,
                              bool showClock) {
   auto configPath = configHelper_.findNextDockConfig();
@@ -115,7 +113,6 @@ void MultiDockModel::addDock(PanelPosition position, int screen,
   setVisibility(dockId, kDefaultVisibility);
   setLaunchers(dockId, defaultLaunchers());
   setShowApplicationMenu(dockId, showApplicationMenu);
-  setShowPager(dockId, showPager);
   setShowTaskManager(dockId, showTaskManager);
   setShowClock(dockId, showClock);
   emit dockAdded(dockId);
@@ -185,15 +182,6 @@ void MultiDockModel::maybeAddDockForMultiScreen() {
       }
     }
   }
-}
-
-bool MultiDockModel::hasPager() const {
-  for (const auto& dock : dockConfigs_) {
-    if (showPager(dock.first)) {
-      return true;
-    }
-  }
-  return false;
 }
 
 const std::vector<LauncherConfig> MultiDockModel::launcherConfigs(int dockId) const {

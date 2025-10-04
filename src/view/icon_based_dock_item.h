@@ -30,7 +30,7 @@
 
 namespace crystaldock {
 
-// Base class for icon-based dock items, such as launchers and pager icons.
+// Base class for icon-based dock items, such as launchers icons.
 class IconBasedDockItem : public DockItem {
  public:
   IconBasedDockItem(DockPanel* parent, MultiDockModel* model, const QString& label,

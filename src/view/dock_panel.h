@@ -164,14 +164,6 @@ class DockPanel : public QWidget {
     saveDockConfig();
   }
 
-  void togglePager();
-
-  void updatePager() {
-    if (showPager_) {
-      reload();
-    }
-  }
-
   void toggleTaskManager() {
     model_->setShowTaskManager(dockId_, taskManagerAction_->isChecked());
     reload();
@@ -260,10 +252,6 @@ class DockPanel : public QWidget {
     return model_->launcherConfigs(dockId_).size();
   }
 
-  int pagerItemCount() const {
-    return showPager_ ? WindowSystem::numberOfDesktops() : 0;
-  }
-
   int clockItemCount() const {
     return showClock_ ? 1 : 0;
   }
@@ -280,7 +268,6 @@ class DockPanel : public QWidget {
 
   void initLaunchers();
   void initApplicationMenu();
-  void initPager();
   void initTasks();
   void reloadTasks();
 
@@ -350,7 +337,6 @@ class DockPanel : public QWidget {
   int screen_;  // the screen (as screen index) that the dock is on.
   PanelVisibility visibility_;
   bool showApplicationMenu_;
-  bool showPager_;
   bool showClock_;
   int minSize_;
   int maxSize_;
@@ -401,7 +387,6 @@ class DockPanel : public QWidget {
   QAction* visibilityAutoHideAction_;
   QAction* visibilityAlwaysOnTopAction_;
   QAction* applicationMenuAction_;
-  QAction* pagerAction_;
   QAction* taskManagerAction_;
   QAction* clockAction_;
   QAction* floatingStyleAction_;
