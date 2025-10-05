@@ -183,7 +183,7 @@ void Program::mousePressEvent(QMouseEvent* e) {
           launch();
           startBounceAnimation();
         } else if (tasks_.size() == 1) {
-          WindowSystem::activateOrMinimizeWindow(tasks_[0].window);
+          WindowSystem::activateWindow(tasks_[0].window);
         } else {
           const auto activeTask = getActiveTask();
           if (activeTask >= 0) {
@@ -192,17 +192,11 @@ void Program::mousePressEvent(QMouseEvent* e) {
             int nextTask;
             if (mod & Qt::ControlModifier) {
               // Cycles backwards with CTRL.
-              nextTask = activeTask > 0 ? (activeTask - 1) : -1;
+              nextTask = activeTask > 0 ? (activeTask - 1) : lastTask;
             } else {
-              nextTask = (activeTask < lastTask) ? (activeTask + 1) : -1;
+              nextTask = (activeTask < lastTask) ? (activeTask + 1) : 0;
             }
-            if (nextTask >= 0 && nextTask <= lastTask) {
-              WindowSystem::activateWindow(tasks_[nextTask].window);
-            } else {
-              for (int i = 0; i <= lastTask; ++i) {
-                WindowSystem::minimizeWindow(tasks_[i].window);
-              }
-            }
+            WindowSystem::activateWindow(tasks_[nextTask].window);
           } else {
             WindowSystem::activateWindow(tasks_[0].window);
           }
