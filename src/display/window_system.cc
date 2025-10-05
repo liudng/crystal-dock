@@ -32,7 +32,6 @@ zwlr_foreign_toplevel_manager_v1* WindowSystem::wlr_window_manager_;
 
 VirtualDesktopManager WindowSystem::virtualDesktopManager_;
 WindowManager WindowSystem::windowManager_;
-AutoHideManager WindowSystem::autoHideManager_;
 
 std::vector<QScreen*> WindowSystem::screens_;
 std::unique_ptr<QDBusInterface> WindowSystem::activityManager_;
@@ -79,10 +78,6 @@ std::unique_ptr<QDBusInterface> WindowSystem::activityManager_;
 }
 
 /* static */ bool WindowSystem::hasVirtualDesktopManager() {
-  return false;
-}
-
-/* static */ bool WindowSystem::hasAutoHideManager() {
   return false;
 }
 

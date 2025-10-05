@@ -97,10 +97,6 @@ struct WindowManager {
   void (*setShowingDesktop)(bool show);
 };
 
-struct AutoHideManager {
-  void (*setAutoHide)(QWidget* widget, Qt::Edge edge, bool on);
-};
-
 class WindowSystem : public QObject {
   Q_OBJECT
 
@@ -142,7 +138,6 @@ class WindowSystem : public QObject {
   static bool init(struct wl_display* display);
 
   static bool hasVirtualDesktopManager();
-  static bool hasAutoHideManager();
   static bool hasActivityManager();
 
   static int numberOfDesktops() {
@@ -189,12 +184,6 @@ class WindowSystem : public QObject {
   static bool showingDesktop() { return windowManager_.showingDesktop(); }
   static void setShowingDesktop(bool show) { windowManager_.setShowingDesktop(show); }
 
-  static void setAutoHide(QWidget* widget, Qt::Edge edge, bool on = true) {
-    if (hasAutoHideManager()) {
-      autoHideManager_.setAutoHide(widget, edge, on);
-    }
-  }
-
   static void setAnchorAndStrut(QWidget* widget, LayerShellQt::Window::Anchors anchors,
                                 uint32_t strutSize);
   static void setLayer(QWidget* widget, LayerShellQt::Window::Layer layer);
@@ -239,7 +228,6 @@ class WindowSystem : public QObject {
 
   static VirtualDesktopManager virtualDesktopManager_;
   static WindowManager windowManager_;
-  static AutoHideManager autoHideManager_;
 
   static std::vector<QScreen*> screens_;
 

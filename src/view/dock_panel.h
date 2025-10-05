@@ -229,7 +229,6 @@ class DockPanel : public QWidget {
   static constexpr int kTooltipSpacing = 10;
 
   bool autoHide() const { return visibility_ == PanelVisibility::AutoHide; }
-  bool intellihide() const { return visibility_ == PanelVisibility::IntelligentAutoHide; }
 
   bool isFloating() const {
     return panelStyle_ == PanelStyle::Glass3D_Floating ||
@@ -293,12 +292,6 @@ class DockPanel : public QWidget {
 
   // Checks if the mouse has actually entered the dock panel's visibility area.
   bool checkMouseEnter(int x, int y);
-
-  // Should the dock hide in Intelligent Auto Hide mode?
-  bool intellihideShouldHide(void* excluding_window = nullptr);
-
-  // Hides/unhides the dock in Intelligent Auto Hide mode if necessary.
-  void intellihideHideUnhide(void* excluding_window = nullptr);
 
   // Is the dock empty?
   // The dock is empty if it has no dock items (separators excluded).
@@ -383,7 +376,6 @@ class DockPanel : public QWidget {
   QAction* positionLeft_;
   QAction* positionRight_;
   QAction* visibilityAlwaysVisibleAction_;
-  QAction* visibilityIntelligentAutoHideAction_;
   QAction* visibilityAutoHideAction_;
   QAction* visibilityAlwaysOnTopAction_;
   QAction* applicationMenuAction_;

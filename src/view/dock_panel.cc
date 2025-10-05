@@ -150,12 +150,10 @@ void DockPanel::delayedRefresh() {
 
 void DockPanel::onCurrentDesktopChanged() {
   reloadTasks();
-  intellihideHideUnhide();
 }
 
 void DockPanel::onCurrentActivityChanged() {
   reloadTasks();
-  intellihideHideUnhide();
 }
 
 void DockPanel::setStrut() {
@@ -164,8 +162,7 @@ void DockPanel::setStrut() {
       setStrut(isHorizontal() ? minHeight_ : minWidth_);
       break;
     case PanelVisibility::AutoHide:
-    case PanelVisibility::IntelligentAutoHide:
-      setStrut(WindowSystem::hasAutoHideManager() ? 0 : 1);
+      setStrut(1);
       break;
     default:
       setStrut(0);
@@ -285,7 +282,6 @@ void DockPanel::removeDock() {
 }
 
 void DockPanel::onWindowAdded(const WindowInfo* info) {
-  intellihideHideUnhide();
   if (autoHide() && !isHidden_) { setAutoHide(); }
 
   if (!showTaskManager()) {
@@ -302,17 +298,11 @@ void DockPanel::onWindowAdded(const WindowInfo* info) {
 }
 
 void DockPanel::onWindowRemoved(void* window) {
-  intellihideHideUnhide(window);
-
   if (!showTaskManager()) {
     return;
   }
 
   removeTask(window);
-
-  if (isEmpty()) {
-    intellihideHideUnhide();
-  }
 }
 
 void DockPanel::onWindowLeftCurrentDesktop(void* window) {
@@ -328,8 +318,6 @@ void DockPanel::onWindowLeftCurrentActivity(void* window) {
 }
 
 void DockPanel::onWindowGeometryChanged(const WindowInfo* task) {
-  intellihideHideUnhide();
-
   if (!showTaskManager()) {
     return;
   }
@@ -354,8 +342,6 @@ void DockPanel::onWindowGeometryChanged(const WindowInfo* task) {
 
 
 void DockPanel::onWindowStateChanged(const WindowInfo *task) {
-  intellihideHideUnhide();
-
   if (!showTaskManager()) {
     return;
   }
@@ -534,7 +520,7 @@ void DockPanel::setShowingPopup(bool showingPopup) {
 }
 
 void DockPanel::paintEvent(QPaintEvent* e) {
-  if (!WindowSystem::hasAutoHideManager() && isHidden_ && (autoHide() || intellihide())) {
+  if (isHidden_ && (autoHide())) {
     return;
   }
 
@@ -690,7 +676,7 @@ void DockPanel::mouseMoveEvent(QMouseEvent* e) {
 bool DockPanel::checkMouseEnter(int x, int y) {
   int x0, y0;
   if (position_ == PanelPosition::Bottom) {
-    if (!WindowSystem::hasAutoHideManager() && visibility_ == PanelVisibility::AutoHide) {
+    if (visibility_ == PanelVisibility::AutoHide) {
       y0 = maxHeight_ - 1;
     } else {
       y0 = maxHeight_ - minHeight_;
@@ -700,7 +686,7 @@ bool DockPanel::checkMouseEnter(int x, int y) {
       return false;
     }
   } else if (position_ == PanelPosition::Top) {
-    if (!WindowSystem::hasAutoHideManager() && visibility_ == PanelVisibility::AutoHide) {
+    if (visibility_ == PanelVisibility::AutoHide) {
       y0 = 1;
     } else {
       y0 = minHeight_;
@@ -710,7 +696,7 @@ bool DockPanel::checkMouseEnter(int x, int y) {
       return false;
     }
   } else if (position_ == PanelPosition::Left) {
-    if (!WindowSystem::hasAutoHideManager() && visibility_ == PanelVisibility::AutoHide) {
+    if (visibility_ == PanelVisibility::AutoHide) {
       x0 = 1;
     } else {
       x0 = minWidth_;
@@ -720,7 +706,7 @@ bool DockPanel::checkMouseEnter(int x, int y) {
       return false;
     }
   } else {  // Right
-    if (!WindowSystem::hasAutoHideManager() && visibility_ == PanelVisibility::AutoHide) {
+    if (visibility_ == PanelVisibility::AutoHide) {
       x0 = maxWidth_ - 1;
     } else {
       x0 = maxWidth_ - minWidth_;
@@ -741,49 +727,6 @@ bool DockPanel::checkMouseEnter(int x, int y) {
   }
 
   return true;
-}
-
-bool DockPanel::intellihideShouldHide(void* excluding_window) {
-  if (visibility_ != PanelVisibility::IntelligentAutoHide) {
-    return false;
-  }
-
-  if (isEmpty()) {
-    return true;
-  }
-
-  QRect dockGeometry = getMinimizedDockGeometry();
-  for (const auto* task : WindowSystem::windows()) {
-    if (isValidTask(task) && (!excluding_window || task->window != excluding_window)) {
-      if ((task->maximized || task->fullscreen)
-          && task->outputs.contains(screenOutput_)) {
-        return true;
-      }
-
-      QRect windowGeometry(task->x, task->y, task->width, task->height);
-      if (windowGeometry.isValid() && !task->minimized && windowGeometry.intersects(dockGeometry)) {
-        return true;
-      }
-    }
-  }
-
-  return false;
-}
-
-void DockPanel::intellihideHideUnhide(void* excluding_window) {
-  if (visibility_ != PanelVisibility::IntelligentAutoHide) {
-    return;
-  }
-
-  if (intellihideShouldHide(excluding_window)) {
-    if (!isHidden_ && isMinimized_) {
-      setAutoHide();
-    }
-  } else {
-    if (isHidden_) {
-      setAutoHide(false);
-    }
-  }
 }
 
 bool DockPanel::isEmpty() {
@@ -921,10 +864,6 @@ void DockPanel::createMenu() {
       QString("Always &Visible"), this,
       [this]() { updateVisibility(PanelVisibility::AlwaysVisible); });
   visibilityAlwaysVisibleAction_->setCheckable(true);
-  visibilityIntelligentAutoHideAction_ = visibility->addAction(
-      QString("&Intelligent Auto Hide"), this,
-      [this]() { updateVisibility(PanelVisibility::IntelligentAutoHide); });
-  visibilityIntelligentAutoHideAction_->setCheckable(true);
   visibilityAutoHideAction_ = visibility->addAction(
       QString("Auto &Hide"), this,
       [this]() { updateVisibility(PanelVisibility::AutoHide); });
@@ -1013,8 +952,6 @@ void DockPanel::setVisibility(PanelVisibility visibility) {
   visibility_ = visibility;
   visibilityAlwaysVisibleAction_->setChecked(
       visibility_ == PanelVisibility::AlwaysVisible);
-  visibilityIntelligentAutoHideAction_->setChecked(
-      visibility_ == PanelVisibility::IntelligentAutoHide);
   visibilityAutoHideAction_->setChecked(
       visibility_ == PanelVisibility::AutoHide);
   visibilityAlwaysOnTopAction_->setChecked(
@@ -1381,7 +1318,6 @@ void DockPanel::updateLayout() {
                                : LayerShellQt::Window::LayerTop);
     isMinimized_ = true;
     if (autoHide()) { isHidden_ = true; }
-    if (intellihide()) { isHidden_ = intellihideShouldHide(); }
     update();
     // Here we have to wait a bit before setMask() to avoid visual artifacts.
     QTimer::singleShot(500, [this]{ setMask(); });
@@ -1502,7 +1438,7 @@ void DockPanel::updateLayout(int x, int y) {
   //resize(maxWidth_, maxHeight_);
   WindowSystem::setLayer(this, LayerShellQt::Window::LayerTop);
   isMinimized_ = false;
-  if (autoHide() || intellihide()) { isHidden_ = false; }
+  if (autoHide()) { isHidden_ = false; }
   setMask();
   updateActiveItem(x, y);
   update();
@@ -1620,12 +1556,12 @@ void DockPanel::setMask() {
   if (isMinimized_) {
     if (isHorizontal()) {
       const int x = (maxWidth_ - minWidth_) / 2;
-      const int h = !WindowSystem::hasAutoHideManager() && isHidden_ ? 1 : minHeight_;
+      const int h = isHidden_ ? 1 : minHeight_;
       const int y = isTop() ? 0 : maxHeight_ - h;
       QWidget::setMask(QRegion(x, y, minWidth_, h));
     } else {  // Vertical.
       const int y = (maxHeight_ - minHeight_) / 2;
-      const int w = !WindowSystem::hasAutoHideManager() && isHidden_ ? 1 : minWidth_;
+      const int w = isHidden_ ? 1 : minWidth_;
       const int x = isLeft() ? 0 : maxWidth_ - w;
       QWidget::setMask(QRegion(x, y, w, minHeight_));
     }
@@ -1651,36 +1587,16 @@ void DockPanel::updatePosition(PanelPosition position) {
 void DockPanel::updateVisibility(PanelVisibility visibility) {
   setVisibility(visibility);
   setStrut();
-  setAutoHide(autoHide() || intellihideShouldHide());
+  setAutoHide(autoHide());
   saveDockConfig();
 }
 
 void DockPanel::setAutoHide(bool on) {
-  if (!WindowSystem::hasAutoHideManager()) {
-    if (intellihide() && isHidden_ != on) {
-      isHidden_ = on;
-      repaint();
-      setMask();
-    }
-    return;
+  if (isHidden_ != on) {
+    isHidden_ = on;
   }
-
-  Qt::Edge edge = Qt::BottomEdge;
-  switch (position_) {
-    case PanelPosition::Top:
-      edge = Qt::TopEdge;
-      break;
-    case PanelPosition::Bottom:
-      edge = Qt::BottomEdge;
-      break;
-    case PanelPosition::Left:
-      edge = Qt::LeftEdge;
-      break;
-    case PanelPosition::Right:
-      edge = Qt::RightEdge;
-      break;
-  }
-  WindowSystem::setAutoHide(this, edge, on);
+  repaint();
+  setMask();
 }
 
 void DockPanel::updateActiveItem(int x, int y) {
