@@ -67,14 +67,8 @@ void Clock::draw(QPainter *painter) const {
                                   model_->clockFontScaleFactor(),
                                   model_->clockFontFamily()));
   painter->setRenderHint(QPainter::TextAntialiasing);
-  if (size_ > minSize_) {
-    drawBorderedText(x, y , w, h, Qt::AlignCenter, time,
-                     2 /* borderWidth */, Qt::black, Qt::white, painter,
-                     /*simplified=*/ true);
-  } else {
-    painter->setPen(Qt::white);
-    painter->drawText(x, y, w, h, Qt::AlignCenter, time);
-  }
+  painter->setPen(Qt::white);
+  painter->drawText(x, y, w, h, Qt::AlignCenter, time);
 }
 
 void Clock::mousePressEvent(QMouseEvent *e) {
