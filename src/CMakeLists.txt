@@ -40,7 +40,6 @@ set(SRCS
     view/dock_panel.cc
     view/edit_launchers_dialog.cc
     view/icon_based_dock_item.cc
-    view/icon_button.cc
     view/iconless_dock_item.cc
     view/multi_dock_view.cc
     view/program.cc
@@ -69,7 +68,6 @@ set(SRCS
     view/dock_panel.h
     view/edit_launchers_dialog.h
     view/icon_based_dock_item.h
-    view/icon_button.h
     view/iconless_dock_item.h
     view/multi_dock_view.h
     view/program.h
