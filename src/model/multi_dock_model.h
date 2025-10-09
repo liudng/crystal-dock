@@ -593,10 +593,6 @@ class MultiDockModel : public QObject {
     return applicationMenuConfig_.categories();
   }
 
-  const std::vector<Category>& applicationMenuSystemCategories() const {
-    return applicationMenuConfig_.systemCategories();
-  }
-
   const ApplicationEntry* findApplication(const std::string& appId) const {
     return applicationMenuConfig_.tryMatchingApplicationId(appId);
   }

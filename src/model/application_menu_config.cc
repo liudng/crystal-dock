@@ -66,7 +66,6 @@ ApplicationMenuConfig::ApplicationMenuConfig(const QStringList& entryDirs)
       fileWatcher_(entryDirs),
       desktopEnv_(DesktopEnv::getDesktopEnv()) {
   initCategories();
-  initSystemCategories();
   loadEntries();
   connect(&fileWatcher_, SIGNAL(directoryChanged(const QString&)),
           this, SLOT(reload()));
@@ -115,10 +114,6 @@ void ApplicationMenuConfig::initCategories() {
         kCategories[i][0], kCategories[i][1], kCategories[i][2]));
     categoryMap_[kCategories[i][0]] = i;
   }
-}
-
-void ApplicationMenuConfig::initSystemCategories() {
-  systemCategories_ = desktopEnv_->getApplicationMenuSystemCategories();
 }
 
 void ApplicationMenuConfig::clearEntries() {
@@ -213,13 +208,6 @@ void ApplicationMenuConfig::reload() {
 }
 
 const ApplicationEntry* ApplicationMenuConfig::findApplication(const std::string& appId) const {
-  for (const auto& category : systemCategories_) {
-    for (const auto& entry : category.entries) {
-      if (entry.appId.toStdString() == appId) {
-        return &entry;
-      }
-    }
-  }
   return entries_.count(appId) > 0
       ? entries_.at(appId)
       : shortAppIds_.count(appId) > 0

@@ -22,31 +22,6 @@
 
 namespace crystaldock {
 
-std::vector<Category> LabwcDesktopEnv::getApplicationMenuSystemCategories() const {
-  static const std::vector<Category> kSystemCategories = {
-    {"Session", "Session", "system-log-out",
-      {
-        {kLockScreenId,
-          "Lock Screen",
-          "",
-          "system-lock-screen",
-          "swaylock",
-          ""
-        },
-        {kLogOutId,
-          "Log Out",
-          "",
-          "system-log-out",
-          "labwc --exit",
-          ""
-        },
-      },
-    },
-  };
-
-  return kSystemCategories;
-}
-
 std::vector<QString> LabwcDesktopEnv::getDefaultLaunchers() const {
   return { kShowDesktopId, defaultWebBrowser(), "alacritty",
            kSeparatorId, kLockScreenId, kLogOutId, kSeparatorId };

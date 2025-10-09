@@ -230,7 +230,6 @@ void ApplicationMenu::buildMenu() {
   menu_.addSeparator();
   addToMenu(model_->applicationMenuCategories());
   menu_.addSeparator();
-  addToMenu(model_->applicationMenuSystemCategories());
   const auto numSubMenus = menu_.actions().size();
   for (int i = 0; i < numSubMenus; ++i) {
     QMenu* menu = menu_.actions()[i]->menu();

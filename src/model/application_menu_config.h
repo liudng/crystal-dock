@@ -49,7 +49,6 @@ class ApplicationMenuConfig : public QObject {
   static QStringList getEntryDirs();
 
   const std::vector<Category>& categories() const { return categories_; }
-  const std::vector<Category>& systemCategories() const { return systemCategories_; }
 
   // Finds the application entry given the application ID.
   // Will match with each of App ID, short command, WM Class and Name in the
@@ -77,9 +76,6 @@ class ApplicationMenuConfig : public QObject {
   // Initializes application categories.
   void initCategories();
 
-  // Initializes system categories.
-  void initSystemCategories();
-
   // Clears all application entries.
   void clearEntries();
 
@@ -95,8 +91,6 @@ class ApplicationMenuConfig : public QObject {
 
   // Application entries, organized by categories.
   std::vector<Category> categories_;
-  // System entries (e.g. Lock Screen / Shut Down), organized by categories.
-  std::vector<Category> systemCategories_;
   // Map from category names to category indices in the above vector,
   // to make loading entries faster.
   std::unordered_map<std::string, int> categoryMap_;

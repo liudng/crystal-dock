@@ -22,24 +22,6 @@
 
 namespace crystaldock {
 
-std::vector<Category> WayfireDesktopEnv::getApplicationMenuSystemCategories() const {
-  static const std::vector<Category> kSystemCategories = {
-    {"Session", "Session", "system-log-out",
-      {
-        {kLockScreenId,
-          "Lock Screen",
-          "",
-          "system-lock-screen",
-          "swaylock",
-          ""
-        },
-      },
-    },
-  };
-
-  return kSystemCategories;
-}
-
 std::vector<QString> WayfireDesktopEnv::getDefaultLaunchers() const {
   return { kShowDesktopId, defaultWebBrowser(), "alacritty",
            kSeparatorId, kLockScreenId, kSeparatorId };

@@ -25,8 +25,6 @@ namespace crystaldock {
 
 class WayfireDesktopEnv : public DesktopEnv {
  public:
-  std::vector<Category> getApplicationMenuSystemCategories() const override;
-
   std::vector<QString> getDefaultLaunchers() const override;
 };
 

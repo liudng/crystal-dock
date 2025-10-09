@@ -174,13 +174,6 @@ void EditLaunchersDialog::removeAllLaunchers() {
 void EditLaunchersDialog::initSystemCommands() {
   ui->systemCommands->addItem(getListItemIcon(kShowDesktopIcon), kShowDesktopName,
       QVariant::fromValue(LauncherInfo(kShowDesktopIcon, kShowDesktopId)));
-  for (const auto& category : model_->applicationMenuSystemCategories()) {
-    for (const auto& entry : category.entries) {
-      ui->systemCommands->addItem(
-          getListItemIcon(entry.icon), entry.name,
-          QVariant::fromValue(LauncherInfo(entry.icon, entry.appId)));
-    }
-  }
 }
 
 void EditLaunchersDialog::loadData() {

@@ -39,10 +39,7 @@ class DesktopEnv {
   static DesktopEnv* getDesktopEnv();
   static QString getDesktopEnvName();
 
-  virtual QString getApplicationMenuIcon() const { return "start-here"; }
-
-  // System categories (e.g. Session/Power) on the Application Menu.
-  virtual std::vector<Category> getApplicationMenuSystemCategories() const { return {}; }
+  virtual QString getApplicationMenuIcon() const { return "start-here-kde"; }
 
   // Default launchers.
   // e.g. File Manager, Console, System Settings.
