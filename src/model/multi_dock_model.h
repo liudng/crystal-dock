@@ -32,7 +32,6 @@
 
 #include "application_menu_config.h"
 #include "config_helper.h"
-#include "launcher_config.h"
 #include <desktop/desktop_env.h>
 
 namespace crystaldock {
@@ -564,17 +563,6 @@ class MultiDockModel : public QObject {
   void saveDockConfig(int dockId) {
     syncDockConfig(dockId);
     emit dockLaunchersChanged(dockId);
-  }
-
-  const std::vector<LauncherConfig> launcherConfigs(int dockId) const;
-
-  void addLauncher(int dockId, const LauncherConfig& launcher) {
-    auto entries = launchers(dockId);
-    unsigned int i = 0;
-    for (; i < entries.size() && entries[i] != kSeparatorId; ++i) {}
-    entries.insert(i, launcher.appId);
-    setLaunchers(dockId, entries);
-    syncDockConfig(dockId);
   }
 
   void removeLauncher(int dockId, const QString& appId) {

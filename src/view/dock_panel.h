@@ -45,7 +45,6 @@
 #include "application_menu_settings_dialog.h"
 #include "appearance_settings_dialog.h"
 #include "dock_item.h"
-#include "edit_launchers_dialog.h"
 #include "task_manager_settings_dialog.h"
 
 namespace crystaldock {
@@ -113,9 +112,6 @@ class DockPanel : public QWidget {
 
   // Gets number of items for an application. Useful when Group Tasks By Application is Off.
   int itemCount(const QString& appId);
-
-  // Update pinned status of an application. Useful when Group Tasks By Application is Off.
-  void updatePinnedStatus(const QString& appId, bool pinned);
 
   // Sets whether the dock is showing some popup menu.
   void setShowingPopup(bool showingPopup);
@@ -194,7 +190,6 @@ class DockPanel : public QWidget {
   // Dock-specific settings are activated from menu items on the context menu
   // directly.
   void showAppearanceSettingsDialog();
-  void showEditLaunchersDialog();
   void showApplicationMenuSettingsDialog();
   void showTaskManagerSettingsDialog();
 
@@ -247,10 +242,6 @@ class DockPanel : public QWidget {
 
   int applicationMenuItemCount() const { return showApplicationMenu_ ? 1 : 0; }
 
-  int launcherItemCount() const {
-    return model_->launcherConfigs(dockId_).size();
-  }
-
   int clockItemCount() const {
     return showClock_ ? 1 : 0;
   }
@@ -265,7 +256,6 @@ class DockPanel : public QWidget {
   void saveDockConfig();
   void loadAppearanceConfig();
 
-  void initLaunchers();
   void initApplicationMenu();
   void initTasks();
   void reloadTasks();
@@ -392,7 +382,6 @@ class DockPanel : public QWidget {
   QMessageBox aboutDialog_;
   AddPanelDialog addPanelDialog_;
   AppearanceSettingsDialog appearanceSettingsDialog_;
-  EditLaunchersDialog editLaunchersDialog_;
   ApplicationMenuSettingsDialog applicationMenuSettingsDialog_;
   TaskManagerSettingsDialog taskManagerSettingsDialog_;
 
@@ -421,7 +410,6 @@ class DockPanel : public QWidget {
   friend class Program;  // for leaveEvent.
   friend class DockPanelTest;
   friend class ConfigDialogTest;
-  friend class EditLaunchersDialogTest;
 };
 
 }  // namespace crystaldock

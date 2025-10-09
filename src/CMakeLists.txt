@@ -27,7 +27,6 @@ set(SRCS
     display/wlr_window_manager.cc
     model/application_menu_config.cc
     model/config_helper.cc
-    model/launcher_config.cc
     model/multi_dock_model.cc
     view/add_panel_dialog.cc
     view/appearance_settings_dialog.cc
@@ -38,7 +37,6 @@ set(SRCS
     view/desktop_selector.cc
     view/dock_item.cc
     view/dock_panel.cc
-    view/edit_launchers_dialog.cc
     view/icon_based_dock_item.cc
     view/iconless_dock_item.cc
     view/multi_dock_view.cc
@@ -55,7 +53,6 @@ set(SRCS
     model/application_menu_config.h
     model/application_menu_entry.h
     model/config_helper.h
-    model/launcher_config.h
     model/multi_dock_model.h
     view/add_panel_dialog.h
     view/appearance_settings_dialog.h
@@ -66,7 +63,6 @@ set(SRCS
     view/desktop_selector.h
     view/dock_item.h
     view/dock_panel.h
-    view/edit_launchers_dialog.h
     view/icon_based_dock_item.h
     view/iconless_dock_item.h
     view/multi_dock_view.h
@@ -83,7 +79,6 @@ set(SRCS
     view/add_panel_dialog.ui
     view/appearance_settings_dialog.ui
     view/application_menu_settings_dialog.ui
-    view/edit_launchers_dialog.ui
     view/task_manager_settings_dialog.ui)
 add_library(crystal-dock_lib STATIC ${SRCS})
 

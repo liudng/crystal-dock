@@ -37,14 +37,12 @@ namespace crystaldock {
 
 Program::Program(DockPanel* parent, MultiDockModel* model, const QString& appId,
                  const QString& label, Qt::Orientation orientation, const QPixmap& icon,
-                 int minSize, int maxSize, const QString& command, bool isAppMenuEntry,
-                 bool pinned)
+                 int minSize, int maxSize, const QString& command, bool isAppMenuEntry)
     : IconBasedDockItem(parent, model, label, orientation, icon, minSize, maxSize),
       appId_(appId),
       appLabel_(label),
       command_(command),
       isAppMenuEntry_(isAppMenuEntry),
-      pinned_(pinned),
       demandsAttention_(false),
       attentionStrong_(false),
       launching_(false) {
@@ -59,7 +57,6 @@ Program::Program(DockPanel* parent, MultiDockModel* model, const QString& appId,
       appLabel_(label),
       command_(""),
       isAppMenuEntry_(false),
-      pinned_(false),
       demandsAttention_(false),
       attentionStrong_(false),
       launching_(false) {
@@ -273,18 +270,15 @@ bool Program::hasTask(void* window) {
 }
 
 bool Program::beforeTask(const QString& program) {
-  return (pinned_ && appLabel_ != program) || appLabel_ < program;
+  // 图标排序不区分大小写
+  return appLabel_.toLower() < program.toLower();
 }
 
 bool Program::shouldBeRemoved() {
   if (!tasks_.empty()) {
     return false;
   }
-  if (model_->groupTasksByApplication()) {
-    return !pinned_;
-  } else {
-    return !pinned_ || parent_->itemCount(appId_) > 1;
-  }
+  return true;
 }
 
 void Program::launch() {
@@ -295,19 +289,6 @@ void Program::launch() {
                      [this] {
                        launching_ = false; parent_->update();
                      });
-}
-
-void Program::pinUnpin() {
-  pinned_ = !pinned_;
-  if (pinned_) {
-    model_->addLauncher(parent_->dockId(), LauncherConfig(appId_, label_, iconName_, command_));
-  } else {  // !pinned
-    model_->removeLauncher(parent_->dockId(), appId_);
-    if (shouldBeRemoved()) {
-      parent_->delayedRefresh();
-    }
-  }
-  parent_->updatePinnedStatus(appId_, pinned_);
 }
 
 void Program::launch(const QString& command) {
@@ -339,21 +320,6 @@ void Program::closeAllWindows() {
 void Program::createMenu() {
   menu_.addSection(QIcon::fromTheme(iconName_), label_);
 
-  if (isAppMenuEntry_ || pinned_) {
-    pinAction_ = menu_.addAction(
-        QString("Pinned"), this,
-        [this] {
-          pinUnpin();
-        });
-    pinAction_->setCheckable(true);
-    pinAction_->setChecked(pinned_);
-  }
-
-  if (isAppMenuEntry_) {
-    menu_.addAction(QIcon::fromTheme("list-add"), QString("&New Window"), this,
-                    [this] { launch(); });
-  }
-
   closeAction_ = menu_.addAction(QIcon::fromTheme("window-close"), QString("&Close Window"), this,
                                  [this] {
                                    parent_->minimize();
@@ -363,14 +329,6 @@ void Program::createMenu() {
                                  });
 
   menu_.addSeparator();
-  menu_.addAction(QIcon::fromTheme("configure"), QString("Edit &Launchers"), parent_,
-                  [this] {
-                    parent_->minimize();
-                    QTimer::singleShot(DockPanel::kExecutionDelayMs, [this]{
-                      parent_->showEditLaunchersDialog();
-                    });
-                  });
-
   if (model_->showTaskManager(parent_->dockId())) {
     menu_.addAction(QIcon::fromTheme("configure"),
                     QString("Task Manager &Settings"),

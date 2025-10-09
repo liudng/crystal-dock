@@ -47,7 +47,7 @@ class Program : public QObject, public IconBasedDockItem {
  public:
   Program(DockPanel* parent, MultiDockModel* model, const QString& appId,
           const QString& label, Qt::Orientation orientation, const QPixmap& icon,
-          int minSize, int maxSize, const QString& command, bool isAppMenuEntry, bool pinned);
+          int minSize, int maxSize, const QString& command, bool isAppMenuEntry);
 
   Program(DockPanel* parent, MultiDockModel* model, const QString& appId,
           const QString& label, Qt::Orientation orientation, const QPixmap& icon,
@@ -66,11 +66,6 @@ class Program : public QObject, public IconBasedDockItem {
   QString getAppId() const override { return appId_; }
 
   QString getAppLabel() const override { return appLabel_; }
-
-  void updatePinnedStatus(bool pinned) override {
-    pinned_ = pinned;
-    pinAction_->setChecked(pinned_);
-  }
 
   bool addTask(const WindowInfo* task) override;
 
@@ -103,9 +98,6 @@ class Program : public QObject, public IconBasedDockItem {
     return -1;
   }
 
-  bool pinned() { return pinned_; }
-  void pinUnpin();
-
   void launch();
   static void launch(const QString& command);
 
@@ -132,12 +124,10 @@ class Program : public QObject, public IconBasedDockItem {
   QString command_;
   // Is an entry on the App Menu, exluding system commands such as Lock Screen / Shut Down.
   bool isAppMenuEntry_;
-  bool pinned_;
   std::vector<ProgramTask> tasks_;
 
   // Context (right-click) menu.
   QMenu menu_;
-  QAction* pinAction_;
   QAction* closeAction_;
 
   // Demands attention logic.

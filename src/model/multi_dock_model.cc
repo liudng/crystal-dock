@@ -184,33 +184,6 @@ void MultiDockModel::maybeAddDockForMultiScreen() {
   }
 }
 
-const std::vector<LauncherConfig> MultiDockModel::launcherConfigs(int dockId) const {
-  std::vector<LauncherConfig> entries;
-  for (const auto& appId : launchers(dockId)) {
-    if (appId == kSeparatorId) {
-      entries.push_back(LauncherConfig(kSeparatorId, "", "", ""));
-      continue;
-    }
-
-    if (appId == kLauncherSeparatorId) {
-      entries.push_back(LauncherConfig(kLauncherSeparatorId, "", "", ""));
-      continue;
-    }
-
-    if (appId == kShowDesktopId) {
-      entries.push_back(LauncherConfig(kShowDesktopId, kShowDesktopName, kShowDesktopIcon, ""));
-      continue;
-    }
-
-    const auto* entry = applicationMenuConfig_.findApplication(appId.toStdString());
-    if (entry != nullptr) {
-      entries.push_back(LauncherConfig(entry->appId, entry->name, entry->icon,
-                                       entry->command));
-    }
-  }
-  return entries;
-}
-
 QStringList MultiDockModel::defaultLaunchers() {
   QStringList launchers;
   const auto desktopEnvItems = desktopEnv_->getDefaultLaunchers();

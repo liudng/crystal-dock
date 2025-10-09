@@ -78,7 +78,6 @@ DockPanel::DockPanel(MultiDockView* parent, MultiDockModel* model, int dockId)
                    QMessageBox::Ok, this, Qt::Tool),
       addPanelDialog_(this, model, dockId),
       appearanceSettingsDialog_(this, model),
-      editLaunchersDialog_(this, model, dockId),
       applicationMenuSettingsDialog_(this, model),
       taskManagerSettingsDialog_(this, model),
       isMinimized_(true),
@@ -226,13 +225,6 @@ void DockPanel::showAppearanceSettingsDialog() {
   appearanceSettingsDialog_.show();
   appearanceSettingsDialog_.raise();
   appearanceSettingsDialog_.activateWindow();
-}
-
-void DockPanel::showEditLaunchersDialog() {
-  editLaunchersDialog_.reload();
-  editLaunchersDialog_.show();
-  editLaunchersDialog_.raise();
-  editLaunchersDialog_.activateWindow();
 }
 
 void DockPanel::showApplicationMenuSettingsDialog() {
@@ -430,19 +422,6 @@ int DockPanel::itemCount(const QString& appId) {
       first, items_.end(),
       [&appId](auto& item) { return appId != item->getAppId(); });
   return last - first;
-}
-
-void DockPanel::updatePinnedStatus(const QString& appId, bool pinned) {
-  const auto first = ranges::find_if(
-      items_,
-      [&appId](auto& item) { return appId == item->getAppId(); });
-  if (first == items_.end()) {
-    return;
-  }
-  const auto last = ranges::find_if(
-      first, items_.end(),
-      [&appId](auto& item) { return appId != item->getAppId(); });
-  ranges::for_each(first, last, [pinned](auto& item) { item->updatePinnedStatus(pinned); });
 }
 
 void DockPanel::setShowingPopup(bool showingPopup) {
@@ -796,7 +775,6 @@ void DockPanel::dropEvent(QDropEvent* e) {
 
 void DockPanel::initUi() {
   initApplicationMenu();
-  initLaunchers();
   initTasks();
   initClock();
   initLayoutVars();
@@ -1008,22 +986,6 @@ void DockPanel::initApplicationMenu() {
   }
 }
 
-void DockPanel::initLaunchers() {
-  for (const auto& launcherConfig : model_->launcherConfigs(dockId_)) {
-    if (launcherConfig.appId == kSeparatorId || launcherConfig.appId == kLauncherSeparatorId) {
-      items_.push_back(std::make_unique<Separator>(
-          this, model_, orientation_, minSize_, maxSize_,
-          launcherConfig.appId == kLauncherSeparatorId));
-    } else {
-      QPixmap icon = loadIcon(launcherConfig.icon, kIconLoadSize);
-      items_.push_back(std::make_unique<Program>(
-          this, model_, launcherConfig.appId, launcherConfig.name, orientation_,
-          icon, minSize_, maxSize_, launcherConfig.command,
-          model_->isAppMenuEntry(launcherConfig.appId.toStdString()), /*pinned=*/true));
-    }
-  }
-}
-
 void DockPanel::initTasks() {
   if (!showTaskManager()) {
     return;
@@ -1043,7 +1005,6 @@ void DockPanel::reloadTasks() {
 
   const int itemsToKeep = applicationMenuItemCount();
   items_.resize(itemsToKeep);
-  initLaunchers();
   initTasks();
   initClock();
   resizeTaskManager();
@@ -1086,11 +1047,9 @@ bool DockPanel::addTask(const WindowInfo* task) {
     for (; i < itemCount() && items_[i]->getAppLabel() == label; ++i);
   }
   if (!appIcon.isNull()) {
-    const auto pinned = !model_->groupTasksByApplication() &&
-                        model_->launchers(dockId_).contains(app->appId);
     items_.insert(items_.begin() + i, std::make_unique<Program>(
         this, model_, appId, label, orientation_, appIcon, minSize_,
-        maxSize_, app->command, /*isAppMenuEntry=*/true, pinned));
+        maxSize_, app->command, /*isAppMenuEntry=*/true));
   } else if (!taskIcon.isNull()) {
     items_.insert(items_.begin() + i, std::make_unique<Program>(
         this, model_, appId, label, orientation_, taskIcon, minSize_, maxSize_));
