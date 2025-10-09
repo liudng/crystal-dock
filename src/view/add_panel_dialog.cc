@@ -97,7 +97,7 @@ void AddPanelDialog::setMode(Mode mode) {
   ui->showTaskManager->setVisible(mode != Mode::Clone);
   ui->showClock->setVisible(mode != Mode::Clone);
 
-  if (mode != Mode::Clone && !WindowSystem::hasVirtualDesktopManager()) {
+  if (mode != Mode::Clone) {
     constexpr int kDeltaY = -40;
     moveY(ui->showTaskManager, kDeltaY);
     moveY(ui->showClock, kDeltaY);

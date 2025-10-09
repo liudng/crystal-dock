@@ -20,7 +20,6 @@
 #define WLR_WINDOW_MANAGER_H_
 
 #include <memory>
-#include <string>
 
 #include "window_system.h"
 #include "wlr_foreign_toplevel_management.h"

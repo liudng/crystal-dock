@@ -22,7 +22,6 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <unordered_map>
 #include <unordered_set>
 
 #include <wayland-client.h>
@@ -41,14 +40,6 @@
 #include <LayerShellQt/Window>
 
 namespace crystaldock {
-
-struct VirtualDesktopInfo {
-  std::string id;
-  uint32_t number;  // 1-based.
-  std::string name;
-  // Pointer to an implementation-specific virtual desktop struct.
-  void* virtual_desktop;
-};
 
 struct WindowInfo {
   // Pointer to an implementation-specific windows struct.
@@ -72,13 +63,6 @@ struct WindowInfo {
   uint32_t height;
   uint32_t mapping_order;
   std::unordered_set<wl_output*> outputs;
-};
-
-struct VirtualDesktopManager {
-  int (*numberOfDesktops)();
-  std::vector<VirtualDesktopInfo> (*desktops)();
-  std::string_view (*currentDesktop)();
-  void (*setCurrentDesktop)(std::string_view);
 };
 
 struct WindowManager {
@@ -105,7 +89,6 @@ class WindowSystem : public QObject {
 
  signals:
   void currentDesktopChanged(std::string_view);
-  void numberOfDesktopsChanged(int);
   void desktopNameChanged(std::string_view desktopId, std::string_view desktopName);
 
   void windowAdded(const WindowInfo*);
@@ -137,36 +120,7 @@ class WindowSystem : public QObject {
   static WindowSystem* self();
   static bool init(struct wl_display* display);
 
-  static bool hasVirtualDesktopManager();
   static bool hasActivityManager();
-
-  static int numberOfDesktops() {
-    if (hasVirtualDesktopManager()) {
-      return virtualDesktopManager_.numberOfDesktops();
-    }
-    return 1;
-  }
-
-  static std::vector<VirtualDesktopInfo> desktops() {
-    if (hasVirtualDesktopManager()) {
-      return virtualDesktopManager_.desktops();
-    }
-    return {};
-  }
-
-  static std::string_view currentDesktop() {
-    if (hasVirtualDesktopManager()) {
-      return virtualDesktopManager_.currentDesktop();
-    }
-    static constexpr char kDesktop[] = "";
-    return kDesktop;
-  }
-
-  static void setCurrentDesktop(std::string_view desktop) {
-    if (hasVirtualDesktopManager()) {
-      virtualDesktopManager_.setCurrentDesktop(desktop);
-    }
-  }
 
   static std::vector<const WindowInfo*> windows() { return windowManager_.windows(); }
   static void* activeWindow() { return windowManager_.activeWindow(); }
@@ -226,7 +180,6 @@ class WindowSystem : public QObject {
 
   static zwlr_foreign_toplevel_manager_v1* wlr_window_manager_;
 
-  static VirtualDesktopManager virtualDesktopManager_;
   static WindowManager windowManager_;
 
   static std::vector<QScreen*> screens_;

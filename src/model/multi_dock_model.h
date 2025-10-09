@@ -85,7 +85,6 @@ constexpr char kDefaultApplicationMenuName[] = "Applications";
 constexpr int kDefaultApplicationMenuIconSize = 40;
 constexpr int kDefaultApplicationMenuFontSize = 14;
 constexpr float kDefaultApplicationMenuBackgroundAlpha = 0.8;
-constexpr bool kDefaultShowDesktopNumber = true;
 constexpr bool kDefaultCurrentDesktopTasksOnly = false;
 constexpr bool kDefaultCurrentScreenTasksOnly = false;
 constexpr bool kDefaultGroupTasksByApplication = true;
@@ -409,15 +408,6 @@ class MultiDockModel : public QObject {
     setAppearanceProperty(kApplicationMenuCategory, kBackgroundAlpha, QString::number(value));
   }
 
-  bool showDesktopNumber() const {
-    return appearanceProperty(kPagerCategory, kShowDesktopNumber,
-                              kDefaultShowDesktopNumber);
-  }
-
-  void setShowDesktopNumber(bool value) {
-    setAppearanceProperty(kPagerCategory, kShowDesktopNumber, value);
-  }
-
   bool currentDesktopTasksOnly() const {
     return appearanceProperty(kTaskManagerCategory, kCurrentDesktopTasksOnly,
                               kDefaultCurrentDesktopTasksOnly);
@@ -647,9 +637,6 @@ class MultiDockModel : public QObject {
   static constexpr char kIconSize[] = "iconSize";
   static constexpr char kFontSize[] = "fontSize";
   static constexpr char kBackgroundAlpha[] = "backgroundAlpha";
-
-  static constexpr char kPagerCategory[] = "Pager";
-  static constexpr char kShowDesktopNumber[] = "showDesktopNumber";  
 
   static constexpr char kTaskManagerCategory[] = "TaskManager";
   static constexpr char kCurrentDesktopTasksOnly[] = "currentDesktopTasksOnly";

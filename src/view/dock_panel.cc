@@ -1081,11 +1081,6 @@ bool DockPanel::isValidTask(const WindowInfo* task) {
     return false;
   }
 
-  if (WindowSystem::hasVirtualDesktopManager() && model_->currentDesktopTasksOnly()
-      && !task->onAllDesktops && task->desktop != WindowSystem::currentDesktop()) {
-    return false;
-  }
-
   QRect taskGeometry(task->x, task->y, task->width, task->height);
   if (model_->currentScreenTasksOnly() && taskGeometry.isValid()
       && !screenGeometry_.intersects(taskGeometry)) {

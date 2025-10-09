@@ -30,7 +30,6 @@ LayerShellQt::Window* getLayerShellWin(QWidget* widget) {
 
 zwlr_foreign_toplevel_manager_v1* WindowSystem::wlr_window_manager_;
 
-VirtualDesktopManager WindowSystem::virtualDesktopManager_;
 WindowManager WindowSystem::windowManager_;
 
 std::vector<QScreen*> WindowSystem::screens_;
@@ -75,10 +74,6 @@ std::unique_ptr<QDBusInterface> WindowSystem::activityManager_;
   initScreens();
 
   return true;
-}
-
-/* static */ bool WindowSystem::hasVirtualDesktopManager() {
-  return false;
 }
 
 /* static */ bool WindowSystem::hasActivityManager() {

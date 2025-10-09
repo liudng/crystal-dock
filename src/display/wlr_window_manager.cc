@@ -18,8 +18,6 @@
 
 #include "wlr_window_manager.h"
 
-#include <iostream>
-
 #include <QGuiApplication>
 
 namespace crystaldock {
