@@ -57,7 +57,6 @@ class MultiDockView : public QObject {
 
   MultiDockModel* model_;  // No ownership.
   std::unordered_map<int, std::unique_ptr<DockPanel>> docks_;
-  DesktopEnv* desktopEnv_;
 };
 
 }  // namespace crystaldock

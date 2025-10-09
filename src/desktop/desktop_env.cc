@@ -24,26 +24,10 @@
 #include <QProcess>
 #include <QStringList>
 
-#include "labwc_desktop_env.h"
-#include "wayfire_desktop_env.h"
 #include <model/application_menu_config.h>
 #include <model/multi_dock_model.h>
 
 namespace crystaldock {
-
-DesktopEnv* DesktopEnv::getDesktopEnv() {
-  QString currentDesktopEnv = getDesktopEnvName();
-  if (currentDesktopEnv == "labwc") {
-    static std::unique_ptr<LabwcDesktopEnv> labwc(new LabwcDesktopEnv);
-    return labwc.get();
-  } else if (currentDesktopEnv == "Wayfire") {
-    static std::unique_ptr<WayfireDesktopEnv> wayfire(new WayfireDesktopEnv);
-    return wayfire.get();
-  }
-
-  static std::unique_ptr<DesktopEnv> generic(new DesktopEnv);
-  return generic.get();
-}
 
 QString DesktopEnv::getDesktopEnvName() {
   QStringList desktops = qEnvironmentVariable("XDG_CURRENT_DESKTOP").split(",", Qt::SkipEmptyParts);
@@ -51,19 +35,6 @@ QString DesktopEnv::getDesktopEnvName() {
   constexpr char kGenericDesktop[] = "generic";
   return desktops.isEmpty() ? kGenericDesktop
                             : desktops.first().mid(0, desktops.first().indexOf(':'));
-}
-
-std::vector<QString> DesktopEnv::getDefaultLaunchers() const {
-  return { defaultWebBrowser() };
-}
-
-QString DesktopEnv::defaultWebBrowser() const {
-  QProcess process;
-  process.start("xdg-settings", {"get", "default-web-browser"});
-  process.waitForFinished(1000 /*msecs*/);
-  QString desktopFile = process.readAllStandardOutput().trimmed();
-  auto appId = desktopFile.first(desktopFile.lastIndexOf('.'));
-  return !appId.isEmpty() ? appId : "firefox";
 }
 
 }  // namespace crystaldock

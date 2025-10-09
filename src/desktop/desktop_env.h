@@ -36,19 +36,9 @@ class DesktopEnv {
  public:
   virtual ~DesktopEnv() = default;
 
-  static DesktopEnv* getDesktopEnv();
   static QString getDesktopEnvName();
 
-  virtual QString getApplicationMenuIcon() const { return "start-here-kde"; }
-
-  // Default launchers.
-  // e.g. File Manager, Console, System Settings.
-  // Returns a list of app IDs.
-  virtual std::vector<QString> getDefaultLaunchers() const;
-
-  // Returns the app ID of the default web browser.
-  // Uses Firefox as fallback if default web browser not set.
-  QString defaultWebBrowser() const;
+  static QString getApplicationMenuIcon() { return "start-here-kde"; }
 };
 
 }  // namespace crystaldock

@@ -71,8 +71,7 @@ constexpr char MultiDockModel::kFontScaleFactor[];
 MultiDockModel::MultiDockModel(const QString& configDir)
     : configHelper_(configDir),
       appearanceConfig_(configHelper_.appearanceConfigPath(),
-                        QSettings::IniFormat),
-      desktopEnv_(DesktopEnv::getDesktopEnv()) {
+                        QSettings::IniFormat) {
   loadDocks();
   connect(&applicationMenuConfig_, SIGNAL(configChanged()),
           this, SIGNAL(applicationMenuConfigChanged()));
@@ -186,12 +185,6 @@ void MultiDockModel::maybeAddDockForMultiScreen() {
 
 QStringList MultiDockModel::defaultLaunchers() {
   QStringList launchers;
-  const auto desktopEnvItems = desktopEnv_->getDefaultLaunchers();
-  launchers.reserve(desktopEnvItems.size());
-  for (const auto& appId : desktopEnvItems) {
-    launchers.append(appId);
-  }
-
   return launchers;
 }
 

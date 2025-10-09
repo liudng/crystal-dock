@@ -108,8 +108,6 @@ class ApplicationMenuConfig : public QObject {
 
   QFileSystemWatcher fileWatcher_;
 
-  DesktopEnv* desktopEnv_;
-
   friend class ApplicationMenuConfigTest;
 };
 

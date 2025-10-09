@@ -182,8 +182,6 @@ class DockPanel : public QWidget {
   // Slot to update zoom animation.
   void updateAnimation();
 
-  void showOnlineDocumentation();
-
   void about();
 
   // These are for global appearance settings.

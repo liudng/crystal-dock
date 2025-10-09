@@ -46,12 +46,6 @@ bool isHidden(const DesktopFile& desktopFile) {
     return true;
   }
 
-  // Do not show LXQt special entries (Log Out / Reboot etc.) in the standard categories,
-  // as they are already available in special sections (Session / Power).
-  if (desktopFile.exec().startsWith("lxqt-leave")) {
-    return true;
-  }
-
   if (desktopFile.categories().isEmpty()) {
     return true;
   }
@@ -63,8 +57,7 @@ bool isHidden(const DesktopFile& desktopFile) {
 
 ApplicationMenuConfig::ApplicationMenuConfig(const QStringList& entryDirs)
     : entryDirs_(entryDirs),
-      fileWatcher_(entryDirs),
-      desktopEnv_(DesktopEnv::getDesktopEnv()) {
+      fileWatcher_(entryDirs) {
   initCategories();
   loadEntries();
   connect(&fileWatcher_, SIGNAL(directoryChanged(const QString&)),

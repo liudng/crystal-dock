@@ -20,8 +20,6 @@ find_package(LayerShellQt 6.0 REQUIRED)
 
 set(SRCS
     desktop/desktop_env.cc
-    desktop/labwc_desktop_env.cc
-    desktop/wayfire_desktop_env.cc
     display/window_system.cc
     display/wlr_foreign_toplevel_management.c
     display/wlr_window_manager.cc
@@ -45,8 +43,6 @@ set(SRCS
     view/task_manager_settings_dialog.cc
     utils/desktop_file.cc
     desktop/desktop_env.h
-    desktop/labwc_desktop_env.h
-    desktop/wayfire_desktop_env.h
     display/window_system.h
     display/wlr_foreign_toplevel_management.h
     display/wlr_window_manager.h

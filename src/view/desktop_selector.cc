@@ -41,7 +41,6 @@ DesktopSelector::DesktopSelector(DockPanel* parent, MultiDockModel* model,
                                  int maxSize, const VirtualDesktopInfo& desktop, int screen)
     : IconBasedDockItem(parent, model, QString::fromStdString(desktop.name),
           orientation, "" /* no icon yet */, minSize, maxSize),
-      desktopEnv_(DesktopEnv::getDesktopEnv()),
       desktop_(desktop),
       screen_(screen),
       desktopWidth_(parent->screenGeometry().width()),

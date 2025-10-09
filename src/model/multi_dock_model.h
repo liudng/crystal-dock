@@ -378,7 +378,7 @@ class MultiDockModel : public QObject {
   }
 
   QString applicationMenuIcon() const {
-    return desktopEnv_->getApplicationMenuIcon();
+    return DesktopEnv::getApplicationMenuIcon();
   }
 
   int applicationMenuIconSize() const {
@@ -745,7 +745,6 @@ class MultiDockModel : public QObject {
   int nextDockId_;
 
   ApplicationMenuConfig applicationMenuConfig_;
-  DesktopEnv* desktopEnv_;
 };
 
 }  // namespace crystaldock

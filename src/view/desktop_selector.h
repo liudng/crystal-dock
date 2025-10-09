@@ -72,8 +72,6 @@ class DesktopSelector : public QObject, public IconBasedDockItem {
 
   void saveConfig();
 
-  DesktopEnv* desktopEnv_;
-
   VirtualDesktopInfo desktop_;
   // The screen that the parent panel is on, 0-based.
   int screen_;

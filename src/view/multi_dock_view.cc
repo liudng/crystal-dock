@@ -29,8 +29,7 @@
 namespace crystaldock {
 
 MultiDockView::MultiDockView(MultiDockModel* model)
-    : model_(model),
-      desktopEnv_(DesktopEnv::getDesktopEnv()) {
+    : model_(model) {
   connect(model_, SIGNAL(dockAdded(int)), this, SLOT(onDockAdded(int)));
   loadData();
 }

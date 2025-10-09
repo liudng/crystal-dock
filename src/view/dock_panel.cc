@@ -211,11 +211,6 @@ void DockPanel::updateAnimation() {
   repaint();
 }
 
-void DockPanel::showOnlineDocumentation() {
-  Program::launch(
-      "xdg-open https://github.com/dangvd/crystal-dock/wiki/Documentation");
-}
-
 void DockPanel::about() {
   aboutDialog_.exec();
 }
@@ -903,9 +898,6 @@ void DockPanel::createMenu() {
   metal2DStyleAction_->setCheckable(true);
 
   QMenu* helpMenu = menu_.addMenu(QIcon::fromTheme("help-contents"), "&Help");
-  helpMenu->addAction(QIcon::fromTheme("help-contents"),
-                  QString("Online &Documentation"),
-                  this, SLOT(showOnlineDocumentation()));
   helpMenu->addAction(QIcon::fromTheme("help-about"), QString("A&bout Crystal Dock"), this,
       [this] {
         minimize();
