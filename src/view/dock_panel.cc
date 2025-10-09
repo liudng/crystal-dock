@@ -49,10 +49,8 @@
 #include "add_panel_dialog.h"
 #include "application_menu.h"
 #include "clock.h"
-#include "desktop_selector.h"
 #include "multi_dock_view.h"
 #include "program.h"
-#include "separator.h"
 #include <display/window_system.h>
 #include <utils/draw_utils.h>
 #include <utils/icon_utils.h>

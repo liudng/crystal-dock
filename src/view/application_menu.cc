@@ -29,8 +29,6 @@
 #include <QTimer>
 #include <QUrl>
 
-#include "display/window_system.h"
-
 #include "dock_panel.h"
 #include "program.h"
 #include <utils/draw_utils.h>

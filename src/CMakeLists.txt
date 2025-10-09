@@ -32,14 +32,12 @@ set(SRCS
     view/application_menu.cc
     view/clock.cc
     view/color_button.cc
-    view/desktop_selector.cc
     view/dock_item.cc
     view/dock_panel.cc
     view/icon_based_dock_item.cc
     view/iconless_dock_item.cc
     view/multi_dock_view.cc
     view/program.cc
-    view/separator.cc
     view/task_manager_settings_dialog.cc
     utils/desktop_file.cc
     desktop/desktop_env.h
@@ -56,14 +54,12 @@ set(SRCS
     view/application_menu.h
     view/clock.h
     view/color_button.h
-    view/desktop_selector.h
     view/dock_item.h
     view/dock_panel.h
     view/icon_based_dock_item.h
     view/iconless_dock_item.h
     view/multi_dock_view.h
     view/program.h
-    view/separator.h
     view/task_manager_settings_dialog.h
     utils/command_utils.h
     utils/desktop_file.h

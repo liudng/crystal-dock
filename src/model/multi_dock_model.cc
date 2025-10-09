@@ -18,8 +18,6 @@
 
 #include "multi_dock_model.h"
 
-#include <iostream>
-
 #include <QFileInfo>
 #include <QProcess>
 
