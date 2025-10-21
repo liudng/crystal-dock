@@ -38,7 +38,7 @@ class DesktopEnv {
 
   static QString getDesktopEnvName();
 
-  static QString getApplicationMenuIcon() { return "start-here-kde"; }
+  static QString getApplicationMenuIcon() { return "start-here"; }
 };
 
 }  // namespace crystaldock
