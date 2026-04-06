@@ -18,14 +18,22 @@
 #ifndef CRYSTALDOCK_ICON_UTILS_H_
 #define CRYSTALDOCK_ICON_UTILS_H_
 
+#include <QGuiApplication>
 #include <QIcon>
 #include <QPixmap>
+#include <QScreen>
 
 namespace crystaldock {
 
 inline QPixmap loadIcon(const QString& iconName, int iconLoadSize) {
+  // Use DPR-aware pixmap loading so icon themes provide full physical
+  // resolution (e.g. 256x256 at scale 2 for a 128 logical-pixel request).
+  const qreal dpr = QGuiApplication::primaryScreen()
+      ? QGuiApplication::primaryScreen()->devicePixelRatio() : 1.0;
+
   // Normally desktop file stores icon as icon name in the icon theme.
-  QPixmap icon = QIcon::fromTheme(iconName).pixmap(iconLoadSize);
+  QPixmap icon = QIcon::fromTheme(iconName).pixmap(
+      QSize(iconLoadSize, iconLoadSize), dpr);
   if (!icon.isNull()) {
     return icon;
   }

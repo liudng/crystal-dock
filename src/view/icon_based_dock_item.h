@@ -41,12 +41,14 @@ class IconBasedDockItem : public DockItem {
 
   int getWidthForSize(int size) const override {
     const auto& icon = getIcon(size);
-    return !icon.isNull() ? icon.width() : size;
+    return !icon.isNull()
+        ? qRound(icon.width() / icon.devicePixelRatio()) : size;
   }
 
   int getHeightForSize(int size) const override {
     const auto& icon = getIcon(size);
-    return !icon.isNull() ? icon.height() : size;
+    return !icon.isNull()
+        ? qRound(icon.height() / icon.devicePixelRatio()) : size;
   }
 
   void draw(QPainter* painter) const override;

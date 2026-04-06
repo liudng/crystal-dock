@@ -629,7 +629,9 @@ void DockPanel::drawGlass3D(QPainter& painter) {
   }
 
   if (isBottom()) {
-    QImage mainImage(width(), height(), QImage::Format_ARGB32);
+    const qreal dpr = devicePixelRatioF();
+    QImage mainImage(width() * dpr, height() * dpr, QImage::Format_ARGB32);
+    mainImage.setDevicePixelRatio(dpr);
     mainImage.fill(0);
     QPainter mainPainter(&mainImage);
     // Draw the items from the end to avoid zoomed items getting clipped by
@@ -641,7 +643,10 @@ void DockPanel::drawGlass3D(QPainter& painter) {
 
     int y = height() - itemSpacing_ - k3DPanelThickness;
     if (isFloating()) { y -= floatingMargin_; }
-    QImage toMirrorImage = mainImage.copy(0, y - itemSpacing_ + 2, width(), itemSpacing_ - 2);
+    const int copyY = qRound((y - itemSpacing_ + 2) * dpr);
+    const int copyH = qRound((itemSpacing_ - 2) * dpr);
+    QImage toMirrorImage = mainImage.copy(0, copyY, mainImage.width(), copyH);
+    toMirrorImage.setDevicePixelRatio(dpr);
     QImage mirrorImage = toMirrorImage.flipped(Qt::Vertical);
     painter.setOpacity(0.3);
     painter.drawImage(0, y, mirrorImage);

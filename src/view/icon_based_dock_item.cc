@@ -18,8 +18,10 @@
 
 #include "icon_based_dock_item.h"
 
+#include <QGuiApplication>
 #include <QIcon>
 #include <QImage>
+#include <QScreen>
 
 #include "dock_panel.h"
 
@@ -86,13 +88,17 @@ void IconBasedDockItem::generateIcons(const QPixmap& icon) {
     return;
   }
 
+  // Scale to physical pixels (size * dpr) so icons are crisp on HiDPI.
+  // https://doc.qt.io/qt-6/highdpi.html
+  const qreal dpr = QGuiApplication::primaryScreen()
+      ? QGuiApplication::primaryScreen()->devicePixelRatio() : 1.0;
   for (int size = minSize_; size <= maxSize_; ++size) {
+    const int physicalSize = qRound(size * dpr);
     icons_[size - minSize_] = QPixmap::fromImage(
         (orientation_ == Qt::Horizontal)
-            ? image.scaledToHeight(size, Qt::SmoothTransformation)
-            : image.scaledToWidth(size, Qt::SmoothTransformation));
-    //https://doc.qt.io/qt-6/highdpi.html
-    icons_[size - minSize_].setDevicePixelRatio(1.0f);
+            ? image.scaledToHeight(physicalSize, Qt::SmoothTransformation)
+            : image.scaledToWidth(physicalSize, Qt::SmoothTransformation));
+    icons_[size - minSize_].setDevicePixelRatio(dpr);
   }
 }
 
